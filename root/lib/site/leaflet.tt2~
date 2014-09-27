@@ -1,0 +1,2 @@
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/') %]leaflet/leaflet.css">
+<script src="[% c.uri_for('/static/') %]leaflet/leaflet.js"></script>

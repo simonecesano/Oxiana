@@ -1,0 +1,45 @@
+[% USE JSON ( pretty => 1 ) %]
+[% PROCESS 'site/leaflet.tt2' %]
+  <script src="[% c.uri_for('/static') %]/lib/he.js"></script>
+
+<style>
+#map { height: 720px; margin: 32px }
+</style>
+<script>
+$(function(){
+var poi = [% c.stash.kml.json %];
+
+var c = poi[0].Point.coordinates.split(',')
+var map = L.map('map').setView([c[1], c[0]], 13);
+
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+_.each(poi, function(e, i){
+    var c = e.Point.coordinates.split(',');
+    L.marker([c[1], c[0]]).addTo(map).bindPopup("<b>" + (i+1) + "</b> | <a href=\"[% c.uri_for('/plan/googlemaps', c.stash.id) %]/" + e.name + "\">" + e.name + "</a>");
+});
+})
+
+
+</script>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div id="map"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <h2>google maps data</h2>
+      <table>
+	[% FOR k = c.stash.kml %]
+	<tr><td>[% k.name | html_entity %]</td><td>[% k.Point.coordinates %]</td></tr>
+	[% END %]
+      </table>
+    </div>
+  </div>
+</div>
+ 
