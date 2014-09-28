@@ -12,13 +12,13 @@
 
    # define a data structure to hold sitewide data
    site = {
-     title     => 'Catalyst::View::TTSite Example Page',
-     copyright => '2014 Your Name Here',
+     title     => 'Oxiana: your own travelogue',
+     copyright => '2014 Oxiana',
    };
 
    # load up any other configuration items
-   PROCESS config/col
-         + config/url;
+   PROCESS config/col.tt2
+         + config/url.tt2;
 
    # set defaults for variables, etc.
    DEFAULT

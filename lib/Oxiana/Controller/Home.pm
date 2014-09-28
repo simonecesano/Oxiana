@@ -26,6 +26,7 @@ sub index :Path :Args(1) {
     my ( $self, $c, $name ) = @_;
     $c->log->info("User: " . ($c->user->{id}));
     $c->log->info("Name: " . $name);
+    $c->stash->{template} = 'home/index.tt2';
 }
 
 

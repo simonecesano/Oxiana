@@ -51,7 +51,7 @@ __PACKAGE__->table("maps");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "user",
+  "user_id",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "name",
   { data_type => "varchar", is_nullable => 1, size => 64 },

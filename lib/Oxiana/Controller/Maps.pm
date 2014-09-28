@@ -21,24 +21,47 @@ Catalyst Controller.
 
 =cut
 
-sub index :Path :Args(2) {
-    my ( $self, $c, $user, $map ) = @_;
-    $c->stash->{map} = $c->model('Maps::Map')->find({ user => $user, name => $map});
-    $c->stash->{template} = 'maps/view.tt2';
+sub base :Chained("/") :PathPart("maps") :CaptureArgs(0) {}
+
+sub user :Chained('base') :PathPart('') :Args(1) {
+    my ($self, $c, $user) = @_;
+    $c->detach(qw/Controller::Home index/, [ $user ]);
 }
 
-sub poi :Path :Args(3) {
+sub map :Chained('base') :PathPart('') :Args(2) {
+    my ( $self, $c, $user, $map ) = @_;
+    $c->stash->{map} = $c->model('Maps::Map')->find({ user_id => $user, name => $map});
+    $c->stash->{user} = $user;
+    $c->stash->{template} = 'maps/list.tt2';
+}
+
+
+sub poi :Chained('base') :PathPart('') :CaptureArgs(3) {
     my ( $self, $c, $user, $map, $poi ) = @_;
-    if (defined $c->req->params) {
-	my $h = $c->req->params->{desc_editor};
+    $c->stash->{user} = $user;
+    $c->stash->{map} = $c->model('Maps::Map')->find({ user_id => $user, name => $map});
+    $c->stash->{poi} = $c->stash->{map}->find_related('pois', { name => $poi });
+}
+
+sub poi_view :Chained('poi') :PathPart('') :Args(0) {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'pois/view.tt2';
+}
+
+sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
+    my ( $self, $c ) = @_;
+    if (keys $c->req->params) {
+	my $h = $c->req->params->{editor};
 	$h =~ s/\n/ /g;
 	$c->log->info($h);
-    } else {
-	$c->stash->{map} = $c->model('Maps::Map')->find({ user => $user, name => $map});
-	$c->stash->{poi} = $c->stash->{map}->find_related('pois', { name => $poi });
-	$c->stash->{template} = 'maps/poi.tt2';
-    }
+	$c->stash->{poi}->description($h);
+	$c->stash->{poi}->update;
+    } 
+    $c->stash->{template} = 'pois/edit.tt2';
 }
+
+
+
 
 =encoding utf8
 

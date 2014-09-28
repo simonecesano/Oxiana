@@ -60,7 +60,7 @@ use Try::Tiny;
 
 sub load_google_data :Private {
     my ( $self, $c ) = @_;
-    my $m = $c->model('Maps::Map')->find_or_create({ user => $c->user->{id}, name => $c->stash->{map}}) ;
+    my $m = $c->model('Maps::Map')->find_or_create({ user_id => $c->user->{id}, name => $c->stash->{map}}) ;
     for (@{$c->flash->{kml}}) {
 	my $i;
 	($i->{lon}, $i->{lat}) = split ',', $_->{Point}->{coordinates};

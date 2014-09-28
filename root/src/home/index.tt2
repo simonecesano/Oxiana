@@ -4,8 +4,8 @@
       <h1>Hi, [% c.user.id %]</h1>
       This is your home page
       <h3>Your maps</h3>
-      [% IF c.model('Maps::Map').search({ 'user' => c.user.id }) %]
-      [% FOR m = c.model('Maps::Map').search({ 'user' => c.user.id }) %]
+      [% IF c.model('Maps::Map').search({ 'user_id' => c.user.id }) %]
+      [% FOR m = c.model('Maps::Map').search({ 'user_id' => c.user.id }) %]
       <a href="[% c.uri_for('/maps', c.user.id, m.name) %]">[% m.name %]</a>
       [% END %]<br />
       <a href="[% c.uri_for('/maps/new') %]">Create another</a>
