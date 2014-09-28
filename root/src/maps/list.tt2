@@ -1,0 +1,45 @@
+[% PROCESS 'site/leaflet.tt2' %]
+<style>
+#map { height: 640px; margin-top: 32px }
+.leaflet-control i.fa-2x { padding-top: 2px }
+.leaflet-control i.fa-lg { padding-top: 7px }
+</style>
+<script>
+$(function(){
+var poi = [% c.model('Maps::Pois').search_rs({ map_id => c.stash.map.id }).as_json %];
+
+var map = L.map('map').setView([poi[0].lat, poi[0].lon ], 13);
+
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+L.easyButton('fa-camera', function(){ leafletImage(map, function(err, canvas){
+    $.post("[% c.uri_for('/image') %]", { img: canvas.toDataURL() }) 
+}) }, 'Snap a picture of the map', map );
+
+_.each(poi, function(e, i){
+    L.marker([e.lat, e.lon]).addTo(map).bindPopup("<b>" + (i+1) + "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/" + e.name + "\">" + e.name + "</a>");
+});
+})
+
+
+</script>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div id="map"></div>
+    </div>
+    <div class="col-md-12">
+[% c.stash.map.name %]
+[% c.stash.map.id %]<br />
+<table>
+  [% FOR p = c.model('Maps::Pois').search({ map_id => c.stash.map.id }) %]
+  <tr><td>[% p.name %]</td><td></td><td></td></tr>
+  [% END %]
+</table>
+
+    </div>
+  </div>
+
