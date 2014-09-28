@@ -50,7 +50,7 @@ sub poi_view :Chained('poi') :PathPart('') :Args(0) {
 
 sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
     my ( $self, $c ) = @_;
-    if (keys $c->req->params) {
+    if (keys %{$c->req->params}) {
 	my $h = $c->req->params->{editor};
 	$h =~ s/\n/ /g;
 	$c->log->info($h);
