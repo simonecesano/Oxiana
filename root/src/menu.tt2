@@ -1,24 +1,46 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="#">Oxiana</a>
     </div>
+    [% IF c.user %]
+    <div class="navbar-collapse collapse" id="navbar-main">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Maps<span class="caret"></span></a>
+          <ul class="dropdown-menu" aria-labelledby="themes">
+            <li><a href="[% c.uri_for('/home', c.user.id) %]">View</a></li>
+            <li class="divider"></li>
+            <li><a href="[% c.uri_for('/import/google') %]">Add Google data</a></li>
+	  </ul>
+	</li>
+	<li class>
+	  <a href="#">Help</a>
+	</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+	  <a href="[% c.uri_for('/logout') %]">Logout</a>
+	</li>
+      </ul>
+    </div>
+    [% ELSE %]
     <div class="navbar-collapse collapse">
-      <form class="navbar-form navbar-right" role="form">
+      <form class="navbar-form navbar-right"  method="post" action="[% c.uri_for('/login') %]" role="form">
         <div class="form-group">
-          <input type="text" placeholder="Email" class="form-control">
+          <input type="text" placeholder="Name" name="name" class="form-control">
         </div>
         <div class="form-group">
-          <input type="password" placeholder="Password" class="form-control">
+          <input type="password" placeholder="Password" name="password" class="form-control">
         </div>
         <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
-        </div><!--/.navbar-collapse -->
+      </form>
+    </div>
+    [% END %]
   </div>
 </div>

@@ -7,6 +7,11 @@
   <link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/bootstrap/css/bootstrap.min.css">
   <script src="[% c.uri_for('/static') %]/bootstrap/js/bootstrap.min.js"></script>
   <style>body { padding-top: 50px; padding-bottom: 20px}</style>
+[% IF c.debug -%]
+  <meta template="[% template.name %]">
+  <meta action="[% c.action %]">
+  <meta path="[% c.action.private_path %]">
+[%- END %]
  </head>
  <body>
 [% PROCESS "menu.tt2" %]

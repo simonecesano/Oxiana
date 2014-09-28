@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Hi, [% c.user.id %]</h1>
+      This is your home page
+      <h3>Your maps</h3>
+      [% IF c.model('Maps::Map').search({ 'user' => c.user.id }) %]
+      [% FOR m = c.model('Maps::Map').search({ 'user' => c.user.id }) %]
+      <a href="[% c.uri_for('/maps', c.user.id, m.name) %]">[% m.name %]</a>
+      [% END %]<br />
+      <a href="[% c.uri_for('/maps/new') %]">Create another</a>
+      [% ELSE %]
+      You don't have any maps yet - want to <a href="[% c.uri_for('/maps/new') %]">start one?</a>
+      [% END %]
+      <h3>Your books</h3>
+    </div>
+  </div>
+</div>
