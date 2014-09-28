@@ -31,7 +31,7 @@ sub poi :Path :Args(3) {
     my ( $self, $c, $user, $map, $poi ) = @_;
     if (defined $c->req->params) {
 	my $h = $c->req->params->{desc_editor};
-	$h =~ s/\n/ /gr;
+	$h =~ s/\n/ /g;
 	$c->log->info($h);
     } else {
 	$c->stash->{map} = $c->model('Maps::Map')->find({ user => $user, name => $map});
