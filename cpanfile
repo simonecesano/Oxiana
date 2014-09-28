@@ -12,7 +12,6 @@ requires "base";
 requires "namespace::autoclean";
 requires "strict";
 requires "utf8";
-requires "warnings
 requires "Template::Plugin::JSON";
 requires "Template::Plugin::Dumper";
 
