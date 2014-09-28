@@ -28,3 +28,4 @@ requires "DBD::Pg";
 requires "Catalyst::View::TT";
 requires "Catalyst::View::JSON";
 
+requires "Config::General";
