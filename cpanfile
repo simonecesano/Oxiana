@@ -29,3 +29,6 @@ requires "Catalyst::View::TT";
 requires "Catalyst::View::JSON";
 
 requires "Config::General";
+
+requires 'Catalyst::Action::RenderView', '0.16';
+requires 'JSON::XS', '3.01';
