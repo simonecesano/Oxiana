@@ -1,5 +1,5 @@
-<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/fontawesome/css/font-awesome.min.css">
-<script src="[% c.uri_for('/static') %]/leaflet/leaflet.js"></script>
-<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/leaflet/leaflet.css">
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css">
 <script src="[% c.uri_for('/static') %]/leaflet/easy-button.js"></script>
 <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.4/leaflet-image.js"></script>
