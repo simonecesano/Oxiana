@@ -53,7 +53,7 @@ sub get_google_data :Private {
     my ( $self, $c ) = @_;
     $c->log->info($c->stash->{url});
     my $kml = get($c->stash->{url});
-    $c->log->info($kml);
+    $c->log->info("KML: \n" . $kml);
     $c->flash->{kml} = [ map { XMLin($_->toString) } ( XML::XPath->new( xml => $kml )->find('//Placemark/Point/..')->get_nodelist) ];
 }
 
