@@ -55,7 +55,7 @@ sub get_google_data :Private {
 
     my $m = $c->model('Google::Maps');
     my $kml = $m->get($c->stash->{url});
-    if ($kml->{success} || 1) {
+    if ($kml->{success}) {
 	$kml = $kml->{content};
 	my $url = $c->stash->{url};
 	# $kml = qx/curl $url/;
