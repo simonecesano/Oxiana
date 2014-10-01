@@ -60,8 +60,8 @@ sub get_google_data :Private {
 	$c->log->info("KML: \n" . $kml);
 	$c->flash->{kml} = [ map { XMLin($_->toString) } ( XML::XPath->new( xml => $kml )->find('//Placemark/Point/..')->get_nodelist) ];
     } else {
-	$c->log->info($kml->{status});
-	$c->log->info($kml->{reason});
+	$c->log->info("Status: " . $kml->{status});
+	$c->log->info("Reason: " . $kml->{reason});
     }
 }
 

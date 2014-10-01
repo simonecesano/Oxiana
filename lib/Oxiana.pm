@@ -84,6 +84,11 @@ __PACKAGE__->config
     );
 
 # Start the application
+
+use Log::Log4perl::Catalyst;
+
+__PACKAGE__->log( Log::Log4perl::Catalyst->new() );
+
 __PACKAGE__->setup();
 
 sub uri_for {
