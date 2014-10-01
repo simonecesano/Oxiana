@@ -58,7 +58,7 @@ sub get_google_data :Private {
     if ($kml->{success} || 1) {
 	$kml = $kml->{content};
 	my $url = $c->stash->{url};
-	$kml = qx/curl $url/;
+	# $kml = qx/curl $url/;
 	$c->log->info("KML: \n" . $kml);
 	$c->flash->{kml} = [ map { XMLin($_->toString) } ( XML::XPath->new( xml => $kml )->find('//Placemark/Point/..')->get_nodelist) ];
     } else {
