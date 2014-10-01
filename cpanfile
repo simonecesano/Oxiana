@@ -6,6 +6,7 @@ requires "JSON";
 requires "LWP::Simple", '6.00';
 requires "Moose";
 requires "Try::Tiny";
+requires "IO::Socket::SSL";
 requires "XML::Simple";
 requires "XML::XPath";
 requires "base";
