@@ -28,6 +28,7 @@ requires "DBD::Pg";
 requires "Catalyst::View::TT";
 requires "Catalyst::View::JSON";
 requires "Catalyst::Model::Adaptor";
+requires "Log::Log4perl::Catalyst"; 
 
 requires "Config::General";
 
