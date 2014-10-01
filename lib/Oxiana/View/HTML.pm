@@ -11,6 +11,7 @@ __PACKAGE__->config({
     TEMPLATE_EXTENSION => '.tt2',
     PRE_PROCESS  => 'config/main.tt2',
     WRAPPER      => 'site/wrapper.tt2',
+    ENCODING     => 'utf-8',
     ERROR        => 'error.tt2',
     TIMER        => 0,
     render_die   => 1,

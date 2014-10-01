@@ -60,12 +60,15 @@ use Try::Tiny;
 
 sub load_google_data :Private {
     my ( $self, $c ) = @_;
-    my $m = $c->model('Maps::Map')->find_or_create({ user_id => $c->user->{id}, name => $c->stash->{map}}) ;
+    # my $m = $c->model('Maps::Map')->create({ user_id => $c->user->{id}, name => $c->stash->{map}});
+    my $m = $c->model('Maps::Map')->create({ user_id => $c->user->{id}, name => $c->stash->{map}});
+    $m->insert;
     for (@{$c->flash->{kml}}) {
 	my $i;
 	($i->{lon}, $i->{lat}) = split ',', $_->{Point}->{coordinates};
+	$c->log->info($_->{name});
 	$i->{name} = $_->{name}; $i->{name} =~ s/\s+$//;
-	try { $m->create_related('pois', $i) } catch { $c->log->info(dump $_) };
+	try { my $e = $m->create_related('pois', $i); $e->insert } catch { $c->log->info(dump $_) };
     }
     return 1;
 }

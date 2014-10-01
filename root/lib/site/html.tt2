@@ -11,6 +11,7 @@
   <meta template="[% template.name %]">
   <meta action="[% c.action %]">
   <meta path="[% c.action.private_path %]">
+  <meta charset="UTF-8">
 [%- END %]
  </head>
  <body>
