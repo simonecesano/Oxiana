@@ -3,7 +3,7 @@ requires "Catalyst::Runtime";
 requires "Catalyst::ScriptRunner";
 requires "Data::Dump";
 requires "JSON";
-requires "LWP::Simple";
+requires "LWP::Simple", '6.00';
 requires "Moose";
 requires "Try::Tiny";
 requires "XML::Simple";
