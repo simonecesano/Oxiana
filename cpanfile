@@ -27,6 +27,7 @@ requires "DBD::Pg";
 
 requires "Catalyst::View::TT";
 requires "Catalyst::View::JSON";
+requires "Catalyst::Model::Adaptor";
 
 requires "Config::General";
 
