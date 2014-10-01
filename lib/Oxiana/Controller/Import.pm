@@ -52,9 +52,17 @@ sub google :Path('google') :Args(0) {
 sub get_google_data :Private {
     my ( $self, $c ) = @_;
     $c->log->info($c->stash->{url});
-    my $kml = get($c->stash->{url});
-    $c->log->info("KML: \n" . $kml);
-    $c->flash->{kml} = [ map { XMLin($_->toString) } ( XML::XPath->new( xml => $kml )->find('//Placemark/Point/..')->get_nodelist) ];
+
+    my $m = $c->model('Google::Maps');
+    my $kml = $m->get($c->stash->{url});
+    if ($kml->{success}) {
+	$kml = $kml->{content};
+	$c->log->info("KML: \n" . $kml);
+	$c->flash->{kml} = [ map { XMLin($_->toString) } ( XML::XPath->new( xml => $kml )->find('//Placemark/Point/..')->get_nodelist) ];
+    } else {
+	$c->log->info($kml->{status});
+	$c->log->info($kml->{reason});
+    }
 }
 
 use Try::Tiny;
