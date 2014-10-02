@@ -20,7 +20,7 @@
 	  </ul>
 	</li>
 	<li class>
-	  <a href="#">Help</a>
+	  <a href="[% c.uri_for('/help') %]">Help</a>
 	</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

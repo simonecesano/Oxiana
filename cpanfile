@@ -17,6 +17,9 @@ requires "IO::Socket::SSL";
 requires "XML::Simple";
 requires "XML::XPath";
 
+requires "URI::QueryParam";
+requires "URI";
+
 
 requires "Catalyst::Plugin::ConfigLoader";
 requires 'Catalyst::Action::RenderView', '0.16';
@@ -35,6 +38,7 @@ requires "Catalyst::Model::Adaptor";
 requires "Log::Log4perl::Catalyst"; 
 requires "Template::Plugin::JSON";
 requires "Template::Plugin::Dumper";
+requires "Template::Plugin::Markdown";
 
 requires "Config::General";
 

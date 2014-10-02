@@ -11,9 +11,13 @@
       <a href="[% c.uri_for('/maps', c.user.id, m.name) %]">[% m.name %]</a><br />
       [% END %]<hr />
       <a href="[% c.uri_for('/maps/new') %]">Create a new map</a><br />
-      <a href="[% c.uri_for('/import/google') %]">Import from Google maps</a><br />	
+      <a href="[% c.uri_for('/import/google') %]">Import from Google maps</a><br />
+      <a href="[% c.uri_for('/import/kml') %]">Load your own KML file</a><br />		
       [% ELSE %]
-      You don't have any maps yet - want to <a href="[% c.uri_for('/maps/new') %]">start one?</a>
+      You don't have any maps yet - want to <a href="[% c.uri_for('/maps/new') %]">start one</a> or
+      <a href="[% c.uri_for('/import/google') %]">import one from Google maps</a> or 
+      <a href="[% c.uri_for('/import/kml') %]">load your own KML file</a> (perfect for old-style Google maps)<br />	
+
       [% END %]
     </div>
     <div class="col-md-6">

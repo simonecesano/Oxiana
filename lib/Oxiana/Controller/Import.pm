@@ -21,7 +21,8 @@ Catalyst Controller.
 
 =cut
 use LWP::Simple;
-
+use URI;
+use URI::QueryParam;
 use XML::Simple;
 use XML::XPath;
 
@@ -36,15 +37,40 @@ sub google :Path('google') :Args(0) {
     my ( $self, $c ) = @_;
 
     if (my $url = $c->req->params->{url}) {
+	$url = URI->new($url);
+	$url = $url->query_form_hash->{mid} || $url->query_form_hash->{msid};
+	$c->log->info("Map id: " . $url);
 	my $map = $c->req->params->{map};
-	($url) = ($url =~ /mid=(.+)/);
-
+	# ($url) = ($url =~ /mid=(.+)/);
 	$c->stash->{url} = 'https://mapsengine.google.com/map/kml?mid=' . $url;
 	$c->stash->{id} = $url;
 	$c->stash->{map} = $c->req->params->{map};
 	$c->forward('get_google_data');
 	$c->forward('load_google_data');
 	$c->res->redirect($c->uri_for("/maps", $c->user->{id}, $map));
+    }
+}
+
+sub kml :Path('kml') :Args(0) {
+    my ( $self, $c ) = @_;
+    my $user = $c->user->{id} || $c->detach(qw/Controller::Error index/);
+    my ($kml, $name);
+    if (keys $c->req->params) {
+	if ($c->req->params->{file}) {
+	    $kml = $c->req->upload('file')->slurp;
+	} elsif ($c->req->params->{url}) {
+	    $c->stash->{map} = $c->req->params->{map};
+	    $kml = $c->model('Google::Maps')->get($c->req->params->{url});
+	    if ($kml->{success}) { $kml = $kml->{content} } else { $c->detach(qw/Controller::Error index/) }
+	};
+	my $xml = XML::XPath->new( xml => $kml );
+	my ($name) = map { XMLin($_->toString) } $xml->find('//Document/name')->get_nodelist;
+	$c->stash->{map} ||= $name;
+	$c->flash->{kml} = [ map { XMLin($_->toString) } ( $xml->find('//Placemark/Point/..')->get_nodelist) ];
+	$c->forward('load_google_data');
+
+	if ($c->req->params->{file}) { $c->res->body("/maps/$user/$name") } 
+	elsif ($c->req->params->{url}) { $c->res->redirect($c->uri_for("/maps", $user, $name)) }
     }
 }
 
@@ -63,7 +89,7 @@ sub get_google_data :Private {
     } else {
 	$c->log->info("Status: " . $kml->{status});
 	$c->log->info("Reason: " . $kml->{reason});
-	$c->forward('Controller::Error index');
+	$c->forward(qw/Controller::Error index/);
     }
 }
 
@@ -71,7 +97,6 @@ use Try::Tiny;
 
 sub load_google_data :Private {
     my ( $self, $c ) = @_;
-    # my $m = $c->model('Maps::Map')->create({ user_id => $c->user->{id}, name => $c->stash->{map}});
     my $m = $c->model('Maps::Map')->create({ user_id => $c->user->{id}, name => $c->stash->{map}});
     $m->insert;
     for (@{$c->flash->{kml}}) {
