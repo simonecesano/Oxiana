@@ -55,7 +55,7 @@ sub kml :Path('kml') :Args(0) {
     my ( $self, $c ) = @_;
     my $user = $c->user->{id} || $c->detach(qw/Controller::Error index/);
     my ($kml, $name);
-    if (keys $c->req->params) {
+    if (keys %{$c->req->params}) {
 	if ($c->req->params->{file}) {
 	    $kml = $c->req->upload('file')->slurp;
 	} elsif ($c->req->params->{url}) {
