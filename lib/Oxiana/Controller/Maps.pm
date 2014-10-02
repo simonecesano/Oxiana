@@ -31,10 +31,18 @@ sub user :Chained('base') :PathPart('') :Args(1) {
 sub map :Chained('base') :PathPart('') :Args(2) {
     my ( $self, $c, $user, $map ) = @_;
     $c->stash->{map} = $c->model('Maps::Map')->find({ user_id => $user, name => $map});
-    $c->stash->{user} = $user;
-    $c->stash->{template} = 'maps/list.tt2';
+    if ($c->stash->{map}) { 
+	$c->stash->{user} = $user;
+	$c->stash->{template} = 'maps/list.tt2';
+    } else {
+    	$c->forward(qw/Controller::Error index/);
+    }
 }
 
+sub map_new :Chained('base') :PathPart('new') :Args(0) {
+    my ($self, $c) = @_;
+    $c->stash->{template} = \'making a new map here';
+}
 
 sub poi :Chained('base') :PathPart('') :CaptureArgs(3) {
     my ( $self, $c, $user, $map, $poi ) = @_;

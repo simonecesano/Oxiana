@@ -14,9 +14,9 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Maps<span class="caret"></span></a>
           <ul class="dropdown-menu" aria-labelledby="themes">
-            <li><a href="[% c.uri_for('/home', c.user.id) %]">View</a></li>
-            <li class="divider"></li>
-            <li><a href="[% c.uri_for('/import/google') %]">Add Google data</a></li>
+            <li><a href="[% c.uri_for('/home') %]">View your maps</a></li>
+	    <li role="presentation" class="divider"></li>
+            <li><a href="[% c.uri_for('/search') %]">Search for maps</a></li>
 	  </ul>
 	</li>
 	<li class>
@@ -30,6 +30,7 @@
       </ul>
     </div>
     [% ELSE %]
+    [% UNLESS c.action. private_path.match('login') %]
     <div class="navbar-collapse collapse">
       <form class="navbar-form navbar-right"  method="post" action="[% c.uri_for('/login') %]" role="form">
         <div class="form-group">
@@ -41,6 +42,7 @@
         <button type="submit" class="btn btn-success">Sign in</button>
       </form>
     </div>
+    [% END %]
     [% END %]
   </div>
 </div>

@@ -24,9 +24,14 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->response->body('Matched Oxiana::Controller::Error in Error.');
+    $c->stash->{template} = 'error/index.tt2';
 }
 
+sub error :Path('/error') {
+    my ( $self, $c ) = @_;
+
+    $c->response->body('Matched Oxiana::Controller::Error in Error foo.');
+}
 
 
 =encoding utf8

@@ -1,22 +1,25 @@
+requires "base";
+requires "namespace::autoclean";
+requires "strict";
+requires "utf8";
+requires "Moose";
+
 requires "Catalyst";
 requires "Catalyst::Runtime";
 requires "Catalyst::ScriptRunner";
 requires "Data::Dump";
 requires "JSON";
 requires "LWP::Simple", '6.00';
-requires "Moose";
+
+# google maps processing
 requires "Try::Tiny";
 requires "IO::Socket::SSL";
 requires "XML::Simple";
 requires "XML::XPath";
-requires "base";
-requires "namespace::autoclean";
-requires "strict";
-requires "utf8";
-requires "Template::Plugin::JSON";
-requires "Template::Plugin::Dumper";
+
 
 requires "Catalyst::Plugin::ConfigLoader";
+requires 'Catalyst::Action::RenderView', '0.16';
 requires "Catalyst::Plugin::Static::Simple";
 requires "Catalyst::Plugin::Authentication";
 requires "Catalyst::Plugin::Session";
@@ -30,8 +33,9 @@ requires "Catalyst::View::TT";
 requires "Catalyst::View::JSON";
 requires "Catalyst::Model::Adaptor";
 requires "Log::Log4perl::Catalyst"; 
+requires "Template::Plugin::JSON";
+requires "Template::Plugin::Dumper";
 
 requires "Config::General";
 
-requires 'Catalyst::Action::RenderView', '0.16';
 requires 'JSON::XS', '3.01';

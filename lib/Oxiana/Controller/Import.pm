@@ -29,7 +29,6 @@ use Data::Dump qw/dump/;
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
-
     $c->response->body('Matched Oxiana::Controller::Import in Import.');
 }
 
@@ -64,7 +63,7 @@ sub get_google_data :Private {
     } else {
 	$c->log->info("Status: " . $kml->{status});
 	$c->log->info("Reason: " . $kml->{reason});
-	$c->forward('Error index');
+	$c->forward('Controller::Error index');
     }
 }
 

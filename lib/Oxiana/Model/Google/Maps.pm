@@ -6,10 +6,10 @@ extends 'Catalyst::Model::Adaptor';
 __PACKAGE__->config( class => 'HTTP::Tiny' );
 
 
-sub mangle_arguments {
-    my ($self, $args) = @_;
-    return ( agent => 'curl/7.8 (i386-redhat-linux-gnu) libcurl 7.8 (OpenSSL 0.9.6b) (ipv6 enabled)')
-}
+# sub mangle_arguments {
+#     my ($self, $args) = @_;
+#     return ( agent => 'curl/7.8 (i386-redhat-linux-gnu) libcurl 7.8 (OpenSSL 0.9.6b) (ipv6 enabled)')
+# }
 
 =head1 NAME
 

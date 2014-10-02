@@ -25,13 +25,17 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
     my $name = $c->req->params->{name};
 
-    if ($c->authenticate( {
-			   username => $c->request->params->{'name'},
-			   password => $c->request->params->{'password'}
-                          } )) {  
-	$c->res->redirect($c->uri_for("/home/$name"));
+    if ($name) {
+	if ($c->authenticate( {
+			       username => $c->request->params->{'name'},
+			       password => $c->request->params->{'password'}
+			      } )) {  
+	    $c->res->redirect($c->uri_for("/home"));
+	} else {
+	    $c->stash->{template} = \"sorry";
+	}
     } else {
-	$c->stash->{template} = \"sorry";
+	$c->stash->{template} = "login.tt2";
     }
 }
 

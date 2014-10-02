@@ -22,10 +22,10 @@ Catalyst Controller.
 =cut
 use Data::Dump qw/dump/;
 
-sub index :Path :Args(1) {
-    my ( $self, $c, $name ) = @_;
-    $c->log->info("User: " . ($c->user->{id}));
-    $c->log->info("Name: " . $name);
+sub index :Path :Args(0) {
+    my ( $self, $c ) = @_;
+
+    $c->res->redirect($c->uri_for("/login")) unless $c->user;
     $c->stash->{template} = 'home/index.tt2';
 }
 
