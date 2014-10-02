@@ -1,0 +1,41 @@
+<script src="[% c.uri_for('/static/lib/dropzone.js') %]"></script>
+<script>
+Dropzone.autoDiscover = false;
+// or disable for specific dropzone:
+// Dropzone.options.myDropzone = false;
+
+$(function() {
+    var myDropzone = new Dropzone("#drop", { url : "[% c.uri_for('/import/kml' ) %]" });
+    myDropzone.on("success", function(file, res) {
+	window.location = res;
+    });
+  })
+
+</script>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2>KML file</h2>
+      <p>If you've saved your points of interest in a KML file drop it
+      here: it will provide the skeleton of your travel guide.</p>
+    </div>
+    <div class="col-md-6" id="google">
+      <form method="post" role="form">
+        <div class="form-group">
+	  <label for="url">KML URL</label>
+          <input type="text" placeholder="Paste your KML URL here" name="url" class="form-control">
+	  <label for="map">Map name</label>
+          <input type="text" placeholder="Type your map name here" name="map" class="form-control">
+        </div>
+        <input type="submit" value="Import data" class="btn btn-success">
+      </form>
+    </div>
+    <div class="col-md-6" id="content">
+      <form method="post" class="dropzone" role="form">
+      <div style="margin:0.5em" id="drop" class="jumbotron">
+        <h4>or drop your KML file here</h4>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

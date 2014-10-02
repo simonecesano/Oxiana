@@ -65,7 +65,7 @@ sub kml :Path('kml') :Args(0) {
 	};
 	my $xml = XML::XPath->new( xml => $kml );
 	my ($name) = map { XMLin($_->toString) } $xml->find('//Document/name')->get_nodelist;
-	$c->stash->{map} ||= $name;
+	$c->stash->{map} ||= $name; $name = $c->stash->{map};
 	$c->flash->{kml} = [ map { XMLin($_->toString) } ( $xml->find('//Placemark/Point/..')->get_nodelist) ];
 	$c->forward('load_google_data');
 
