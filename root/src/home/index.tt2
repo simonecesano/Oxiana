@@ -16,7 +16,7 @@
       [% ELSE %]
       You don't have any maps yet - want to <a href="[% c.uri_for('/maps/new') %]">start one</a> or
       <a href="[% c.uri_for('/import/google') %]">import one from Google maps</a> or 
-      <a href="[% c.uri_for('/import/kml') %]">load your own KML file</a> (perfect for old-style Google maps)<br />	
+      <a href="[% c.uri_for('/import/kml') %]">load your own KML file</a><br />	
 
       [% END %]
     </div>

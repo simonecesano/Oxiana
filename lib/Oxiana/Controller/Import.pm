@@ -38,11 +38,18 @@ sub google :Path('google') :Args(0) {
 
     if (my $url = $c->req->params->{url}) {
 	$url = URI->new($url);
-	$url = $url->query_form_hash->{mid} || $url->query_form_hash->{msid};
+
+	if ($url->query_form_hash->{mid}) {
+	    $c->stash->{url} = 'https://mapsengine.google.com/map/kml?mid=' . $url->query_form_hash->{mid};
+	} elsif ($url->query_form_hash->{msid}) {
+	    $c->stash->{url} = 'https://www.google.com/maps/ms?msa=0&ie=UTF8&output=kml&msid=' . $url->query_form_hash->{msid};
+	} else {
+	    $c->detach(qw/Controller::Error index/)
+	}
+
 	$c->log->info("Map id: " . $url);
 	my $map = $c->req->params->{map};
-	# ($url) = ($url =~ /mid=(.+)/);
-	$c->stash->{url} = 'https://mapsengine.google.com/map/kml?mid=' . $url;
+
 	$c->stash->{id} = $url;
 	$c->stash->{map} = $c->req->params->{map};
 	$c->forward('get_google_data');
@@ -63,7 +70,7 @@ sub kml :Path('kml') :Args(0) {
 	    $kml = $c->model('Google::Maps')->get($c->req->params->{url});
 	    if ($kml->{success}) { $kml = $kml->{content} } else { $c->detach(qw/Controller::Error index/) }
 	};
-	my $xml = XML::XPath->new( xml => $kml );
+	my $xml = XML::XPath->new( xml => $kml ) || $c->detach(qw/Controller::Error index/);
 	my ($name) = map { XMLin($_->toString) } $xml->find('//Document/name')->get_nodelist;
 	$c->stash->{map} ||= $name; $name = $c->stash->{map};
 	$c->flash->{kml} = [ map { XMLin($_->toString) } ( $xml->find('//Placemark/Point/..')->get_nodelist) ];
@@ -83,7 +90,6 @@ sub get_google_data :Private {
     if ($kml->{success}) {
 	$kml = $kml->{content};
 	my $url = $c->stash->{url};
-	# $kml = qx/curl $url/;
 	$c->log->info("KML: \n" . $kml);
 	$c->flash->{kml} = [ map { XMLin($_->toString) } ( XML::XPath->new( xml => $kml )->find('//Placemark/Point/..')->get_nodelist) ];
     } else {
