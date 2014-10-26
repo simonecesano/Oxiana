@@ -56,6 +56,7 @@ sub poi_view :Chained('poi') :PathPart('') :Args(0) {
     $c->stash->{template} = 'pois/view.tt2';
 }
 
+use Hash::Merge qw( merge );
 sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
     my ( $self, $c ) = @_;
     if (keys %{$c->req->params}) {
@@ -63,6 +64,15 @@ sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
 	$h =~ s/\n/ /g;
 	$c->log->info($h);
 	$c->stash->{poi}->description($h);
+	for (grep { !/editor/ } keys %{$c->req->params}) {
+	    my $ed = $c->stash->{poi}->extended_data;
+	    if ($c->stash->{poi}->result_source->has_column($_)) {
+		$c->stash->{poi}->set_column($_ => $c->req->params->{$_})
+	    } else {
+		$ed->{$_} = $c->req->params->{$_};
+	    }
+	    $c->stash->{poi}->extended_data($ed);
+	}
 	$c->stash->{poi}->update;
     } 
     $c->stash->{template} = 'pois/edit.tt2';

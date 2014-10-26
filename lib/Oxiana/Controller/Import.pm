@@ -28,11 +28,6 @@ use XML::XPath;
 
 use Data::Dump qw/dump/;
 
-sub index :Path :Args(0) {
-    my ( $self, $c ) = @_;
-    $c->response->body('Matched Oxiana::Controller::Import in Import.');
-}
-
 sub google :Path('google') :Args(0) {
     my ( $self, $c ) = @_;
 
@@ -63,21 +58,13 @@ sub kml :Path('kml') :Args(0) {
     my $user = $c->user->{id} || $c->detach(qw/Controller::Error index/);
     my ($kml, $name);
     if (keys %{$c->req->params}) {
-	if ($c->req->params->{file}) {
-	    $kml = $c->req->upload('file')->slurp;
-	} elsif ($c->req->params->{url}) {
-	    $c->stash->{map} = $c->req->params->{map};
-	    $kml = $c->model('Google::Maps')->get($c->req->params->{url});
-	    if ($kml->{success}) { $kml = $kml->{content} } else { $c->detach(qw/Controller::Error index/) }
-	};
+	if ($c->req->params->{file}) { $kml = $c->req->upload('file')->slurp } else { $c->detach(qw/Controller::Error index/) };
 	my $xml = XML::XPath->new( xml => $kml ) || $c->detach(qw/Controller::Error index/);
 	my ($name) = map { XMLin($_->toString) } $xml->find('//Document/name')->get_nodelist;
 	$c->stash->{map} ||= $name; $name = $c->stash->{map};
 	$c->flash->{kml} = [ map { XMLin($_->toString) } ( $xml->find('//Placemark/Point/..')->get_nodelist) ];
 	$c->forward('load_google_data');
-
 	if ($c->req->params->{file}) { $c->res->body("/maps/$user/$name") } 
-	elsif ($c->req->params->{url}) { $c->res->redirect($c->uri_for("/maps", $user, $name)) }
     }
 }
 

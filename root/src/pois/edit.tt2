@@ -1,3 +1,20 @@
+[%-
+   poi_types = [
+  "bar",
+  "restaurant",
+  "cocktail bar",
+  "museum",
+  "stadium",
+  "taxi",
+  "beer",
+  "recycling",
+  "postoffice",
+  "bookstore",
+  "bus stop",
+  "supermarket",
+]
+-%]
+
 <script src="http://cdn.ckeditor.com/4.4.5/standard/ckeditor.js"></script>
 <div class="container">
   <div class="row">
@@ -6,25 +23,45 @@
 	<h1>[% c.stash.poi.name %]</h1>
       </div>
       <ul class="nav nav-tabs">
-	<li class="active"><a role="tab" data-toggle="tab" href="#address">Address</a></li>
+	<li><a role="tab" data-toggle="tab" href="#address">Address</a></li>
 	<li><a role="tab" data-toggle="tab" href="#description">Description</a></li>
 	<li><a role="tab" data-toggle="tab" href="#map">Map</a></li>
       </ul>
       <div class="tab-content">
-	<div id="address" class="col-md-12 tab-pane">
-	  Address<br />
-	  address goes here
+	<div id="address" class="col-md-12 tab-pane active">
+	  <div class="col-md-6"><div class="form-group">
+              <label for="address">Address:</label>
+              <textarea rows="5" name="address" type="text" class="form-control" id="address">[% c.stash.poi.extended_data.address %]</textarea>
+            </div>
+	    <div class="form-group">
+	      <label>POI type:&emsp;</label>
+	      [% FOR t = poi_types %]
+	      <div style="display:inline-block" class="radio">[% x = x + 1%]
+		<label><input type="radio" name="poi_type" id="opt[% x %]" value="[% t %]" [% IF t.match(c.stash.poi.poi_type) %][% 'checked' %][% END %]>[% t %]</label>
+	      </div>	      
+	      [% END %]
+	    </div>
+	  </div>
+	  <div class="col-md-6">
+	    <div class="form-group">
+              <label for="hours">Hours:</label>
+              <textarea rows="8" name="hours" type="text" class=
+			"form-control" id="hours">[% c.stash.poi.extended_data.hours %]</textarea>
+            </div>
+	  </div>
 	</div>
 	<div id="description" class="col-md-12 tab-pane">
           <span style="margin:6px"><textarea name="editor" id="editor" rows="30" cols="80">[% c.stash.poi.description %]</textarea></span>
           <script>CKEDITOR.replace( 'editor' )</script>
+	</div>
+	<div id="map" class="col-md-12 tab-pane">
+	  there is a map here
 	</div>
       </div>
       <div class="col-md-12">
 	<input type="submit" style="margin:6px" type="button"
 	class="btn btn-primary" value="save"><a class="btn
 	btn-primary" href=".">view</a>&ensp;<a class="btn btn-primary" href="..">go to map</a>
-
       </div>
     </form>
   </div>
