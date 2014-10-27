@@ -1,4 +1,5 @@
 [% PROCESS 'site/leaflet.tt2' %]
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
 <style>
 #map { height: 640px; margin-top: 32px }
 .leaflet-control i.fa-2x { padding-top: 2px }
@@ -21,6 +22,7 @@ L.easyButton('fa-camera', function(){ leafletImage(map, function(err, canvas){
 _.each(poi, function(e, i){
     L.marker([e.lat, e.lon]).addTo(map).bindPopup("<b>" + (i+1) + "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/" + e.name + "\">" + e.name + "</a>");
 });
+var hash = L.hash(map);
 })
 
 

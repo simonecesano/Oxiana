@@ -78,7 +78,10 @@ sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
     $c->stash->{template} = 'pois/edit.tt2';
 }
 
-
+sub poi_add :Chained('poi') :PathPart('edit') :Args(0) {
+    my ( $self, $c ) = @_;
+    $c->res->body('added');
+}
 
 
 =encoding utf8
