@@ -38,7 +38,7 @@ _.each(poi, function(e, i){
   <tr><td>[% p.name %]</td><td></td><td></td></tr>
   [% END %]
 </table>
-<div style="-moz-column-count: 4;column-count:4;">
+<div style="-webkit-column-count:4;-moz-column-count:4;column-count:4;">
   <ol>
   [% FOR p = c.model('Maps::Pois').search({ map_id => c.stash.map.id }) %]
   <li><a href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% p.name %]">[% p.name %]</li>
