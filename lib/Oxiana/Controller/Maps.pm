@@ -57,6 +57,7 @@ sub poi_view :Chained('poi') :PathPart('') :Args(0) {
 }
 
 use Hash::Merge qw( merge );
+
 sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
     my ( $self, $c ) = @_;
     if (keys %{$c->req->params}) {
@@ -78,11 +79,38 @@ sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
     $c->stash->{template} = 'pois/edit.tt2';
 }
 
-sub poi_add :Chained('poi') :PathPart('edit') :Args(0) {
+use URI::Escape;
+use URI;
+use Data::Dump qw/dump/;
+
+sub poi_add :Path('/poi/add') :Args(0) {
     my ( $self, $c ) = @_;
-    $c->res->body('added');
+    my $uri_decoded = uri_unescape($c->req->params->{url});
+    my $uri = URI->new($c->req->params->{url});
+    my $iri = uri_unescape($uri->as_iri);
+    for ($iri) { s/.+?place\///; s/@//; s/\+/ /g };
+    my ($place, $latlon) = split /\//, $iri;
+
+    $c->res->body(join "\n", 
+		  "<pre>added",
+		  $uri->path,
+		  $uri->as_iri,
+		  $iri,
+		  (join '::', ($place, $latlon)),
+		  (dump _google_url_to_loc($c->req->params->{url})),
+		  '</pre>');
 }
 
+
+sub _google_url_to_loc {
+    my $uri = URI->new(shift);
+    my $iri = uri_unescape($uri->as_iri);
+    for ($iri) { s/.+?place\///; s/@//; s/\+/ /g };
+    my ($place, $latlon) = split /\//, $iri;
+    my @latlon = split ',', $latlon;
+    my $r = { name => $place, lat  => $latlon[0], lon  => $latlon[1] };
+    return $r;
+}
 
 =encoding utf8
 
