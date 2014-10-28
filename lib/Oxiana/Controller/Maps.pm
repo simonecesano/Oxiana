@@ -52,7 +52,8 @@ sub map_new :Chained('base') :PathPart('new') :Args(0) {
 
 sub poi :Chained('map') :PathPart('') :CaptureArgs(1) {
     my ( $self, $c, $poi ) = @_;
-    $c->stash->{poi} = $c->stash->{map}->find_related('pois', { name => $poi });
+    $c->stash->{poi} = $c->stash->{map}->find_related('pois', { name => $poi })
+	|| $c->detach(qw/Controller::Error index/);
 }
 
 sub poi_view :Chained('poi') :PathPart('') :Args(0) {
