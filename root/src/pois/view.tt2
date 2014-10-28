@@ -20,7 +20,10 @@ $(function(){
 	<h1>[% poi.name %]</h1>
       </div>
       <div class="col-md-6">
-	[% poi.description %]
+	<div id="address">[% poi.extended_data.address.replace("\n", '<br />') %]<p /></div>
+	<div id="description">[% poi.description %]</div>
+	<div id="hours">[% poi.extended_data.hours.replace("\n",
+	'<br />').replace("\t", ': ') %]</div>
 	<a href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% poi.name %]/edit">edit</a>
 	<a href="/maps/[% c.stash.user %]/[% c.stash.map.name %]">back to map</a>
       </div>
