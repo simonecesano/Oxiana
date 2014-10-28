@@ -28,26 +28,30 @@ sub user :Chained('base') :PathPart('') :Args(1) {
     $c->detach(qw/Controller::Home index/, [ $user ]);
 }
 
-sub map :Chained('base') :PathPart('') :Args(2) {
+sub map :Chained('base') :PathPart('') :CaptureArgs(2) {
     my ( $self, $c, $user, $map ) = @_;
     $c->stash->{map} = $c->model('Maps::Map')->find({ user_id => $user, name => $map});
     if ($c->stash->{map}) { 
+	$c->session->{current_map} = $map;
 	$c->stash->{user} = $user;
-	$c->stash->{template} = 'maps/list.tt2';
     } else {
-    	$c->forward(qw/Controller::Error index/);
+    	$c->detach(qw/Controller::Error index/);
     }
 }
+
+sub map_view :Chained('map') :PathPart('') :Args(0) {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'maps/list.tt2';
+}
+
 
 sub map_new :Chained('base') :PathPart('new') :Args(0) {
     my ($self, $c) = @_;
     $c->stash->{template} = \'making a new map here';
 }
 
-sub poi :Chained('base') :PathPart('') :CaptureArgs(3) {
-    my ( $self, $c, $user, $map, $poi ) = @_;
-    $c->stash->{user} = $user;
-    $c->stash->{map} = $c->model('Maps::Map')->find({ user_id => $user, name => $map});
+sub poi :Chained('map') :PathPart('') :CaptureArgs(1) {
+    my ( $self, $c, $poi ) = @_;
     $c->stash->{poi} = $c->stash->{map}->find_related('pois', { name => $poi });
 }
 
@@ -56,6 +60,8 @@ sub poi_view :Chained('poi') :PathPart('') :Args(0) {
     $c->stash->{template} = 'pois/view.tt2';
 }
 
+
+
 use Hash::Merge qw( merge );
 
 sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
@@ -63,7 +69,6 @@ sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
     if (keys %{$c->req->params}) {
 	my $h = $c->req->params->{editor};
 	$h =~ s/\n/ /g;
-	$c->log->info($h);
 	$c->stash->{poi}->description($h);
 	for (grep { !/editor/ } keys %{$c->req->params}) {
 	    my $ed = $c->stash->{poi}->extended_data;
@@ -85,26 +90,28 @@ use Data::Dump qw/dump/;
 
 sub poi_add :Path('/poi/add') :Args(0) {
     my ( $self, $c ) = @_;
-    my $uri_decoded = uri_unescape($c->req->params->{url});
-    my $uri = URI->new($c->req->params->{url});
-    my $iri = uri_unescape($uri->as_iri);
-    for ($iri) { s/.+?place\///; s/@//; s/\+/ /g };
-    my ($place, $latlon) = split /\//, $iri;
 
-    $c->res->body(join "\n", 
-		  "<pre>added",
-		  $uri->path,
-		  $uri->as_iri,
-		  $iri,
-		  (join '::', ($place, $latlon)),
-		  (dump _google_url_to_loc($c->req->params->{url})),
-		  '</pre>');
+    $c->stash->{map} = $c->model('Maps::Map')->find({ user_id => $c->user->id, name => $c->session->{current_map}});
+
+    my $poi = $self->_google_url_to_loc($c->req->params->{url});
+    $c->detach(qw/Controller::Error index/) unless ($poi->{name} && defined $poi->{lat} && defined $poi->{lon});
+
+    $c->log->info(dump $poi);
+    if ($c->stash->{poi} = $c->stash->{map}->related_resultset('pois')->create($poi)) {
+	$c->res->redirect($c->uri_for('/maps', $c->user->id, $c->session->{current_map}, $poi->{name}, 'edit'));
+    } else {
+    	$c->detach(qw/Controller::Error index/);
+    }
 }
 
 
 sub _google_url_to_loc {
+    shift;
     my $uri = URI->new(shift);
+    my $check = quotemeta('https://www.google.de/maps/place/');
+    return unless $uri =~ /$check/;
     my $iri = uri_unescape($uri->as_iri);
+
     for ($iri) { s/.+?place\///; s/@//; s/\+/ /g };
     my ($place, $latlon) = split /\//, $iri;
     my @latlon = split ',', $latlon;
