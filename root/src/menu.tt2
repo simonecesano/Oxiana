@@ -19,6 +19,9 @@
             <li><a href="[% c.uri_for('/search') %]">Search for maps</a></li>
 	  </ul>
 	</li>
+        <li>
+	  <a href="[% c.uri_for('/location') %]">Location</a>
+	</li>
 	<li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Help<span class="caret"></span></a>
 	  <ul class="dropdown-menu" aria-labelledby="themes">

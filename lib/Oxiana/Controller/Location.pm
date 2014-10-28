@@ -23,27 +23,10 @@ Catalyst Controller.
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
-
+    if ($c->req->params->{name}) {
+	$c->detach(qw/Controller::Maps poi_add/);
+    }
 }
-
-sub add :Path :Args(4) {
-    my ($self, $user, $map, $lat, $lon) = @_;
-    
-}
-
-
-=encoding utf8
-
-=head1 AUTHOR
-
-Cesano, Simone
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 __PACKAGE__->meta->make_immutable;
 

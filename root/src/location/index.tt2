@@ -1,10 +1,17 @@
+<script src="[% c.uri_for('/static') %]/lib/URI.js"></script>
+<script src="[% c.uri_for('/static') %]/lib/spin.min.js"></script>
 <script>
 $(function(){
+    if (URI().search().length > 0) { window.location.href = URI().search('').toString() }
+    $('#add').hide();
     if ("geolocation" in navigator) {
-	$('#locate').click(function(){
+	$('#locate_button').click(function(){
+	    var s = new Spinner().spin(document.getElementById('spinner_img'));
+	    $('#spinner').modal('toggle')
 	    navigator.geolocation.getCurrentPosition(function(position) {
 		console.log([position.coords.latitude, position.coords.longitude].join(", "));
-		$('#content').html([position.coords.latitude, position.coords.longitude].join(", "));
+		$('#lon').val(position.coords.longitude); $('#lat').val(position.coords.latitude);
+		$('#locate').hide(); $('#add').show(); $('#spinner').modal('toggle')
 	    });
 	});
     } else {
@@ -14,16 +21,51 @@ $(function(){
 </script>
 <div class="container">
   <div class="row">
-    <div id="current" class="col-md-12">
-      <div>
-	<div id="locate" style="margin-top:3em" type="button" class="btn btn-primary btn-lg active">Locate</div>
-	<div class="col-md-12">
-	Your current map is [% c.session.current_map %]<br />
-	[% c.user.id %]<br />
+    <div id="locate" class="col-md-12">
+      <div class="col-md-12">
+	<div id="locate_button" style="margin-top:3em" type="button" class="btn btn-primary btn-lg active">Locate</div>
       </div>
     </div>
-    
-    <div id="content" class="col-md-12">
+    <div id="add" class="col-md-12">
+      <form role="form">
+	<div id="content"></div>
+	<div class="col-md-6">
+	  <div class="form-group">
+            <label for="name">Place:</label>
+            <input name="name" type="text" class="form-control" id="name">
+          </div>
+        </div>
+	<div class="col-md-2">
+	  <div class="form-group">
+            <label for="lat">latitude:</label>
+            <input name="lat" type="text" class="form-control" id="lat">
+          </div>
+        </div>
+	<div class="col-md-2">
+	  <div class="form-group">
+            <label for="lon">Longitude:</label>
+            <input name="lon" type="text" class="form-control" id="lon">
+          </div>
+        </div>
+	<div class="col-md-12">
+	  <button id="save" type="submit" class="btn btn-primary btn-lg active">Save location</button>
+	</div>
+      </form>
     </div>
   </div>	
+</div>
+
+<div id="spinner" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+	<h4 class="modal-title">Loading location</h4>
+      </div>
+      <div class="modal-body">
+	<div style="height:120px">
+	  <span id="spinner_img"></span>
+	</div>
+      </div>
+    </div>
+  </div>
 </div>

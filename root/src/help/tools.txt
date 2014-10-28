@@ -9,7 +9,7 @@ Our bookmarklet allows you to quickly add a point of interest to your current ma
 It's simple:
 
 - drag and drop the
-<a href='javascript:(function(){var%20w%20=%20window.open("");%20w.location.href%20=%20"http://oxiana.herokuapp.com/poi/add?url="%20+%20unescape(encodeURIComponent(window.location.href))})()'>Add to Oxiana</a> bookmarklet to your toolbar 
+<a href='javascript:(function(){var%20w=window.open("");%20w.location.href="http://oxiana.herokuapp.com/poi/add?url="+unescape(encodeURIComponent(window.location.href))})()'>Add to Oxiana</a> bookmarklet to your toolbar 
 - search for a place on Google maps
 - make sure that you choose only one of the results
 - click on the bookmarklet on your toolbar

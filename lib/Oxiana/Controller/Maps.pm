@@ -93,7 +93,13 @@ sub poi_add :Path('/poi/add') :Args(0) {
     my ( $self, $c ) = @_;
 
     $c->stash->{map} = $c->model('Maps::Map')->find({ user_id => $c->user->id, name => $c->session->{current_map}});
+    $c->detach('add_poi_by_url') if $c->req->params->{url};
+    $c->detach('add_poi_by_location') if $c->req->params->{name};
+    
+}
 
+sub add_poi_by_url :Private {
+    my ( $self, $c ) = @_;
     my $poi = $self->_google_url_to_loc($c->req->params->{url});
     $c->detach(qw/Controller::Error index/) unless ($poi->{name} && defined $poi->{lat} && defined $poi->{lon});
 
@@ -105,6 +111,20 @@ sub poi_add :Path('/poi/add') :Args(0) {
     }
 }
 
+sub add_poi_by_location :Private {
+    my ( $self, $c ) = @_;
+    my $q = $c->req->params;
+    if ($q->{name} && defined $q->{lat} && defined $q->{lon}) {
+	my $poi = {}; @{$poi}{qw/name lat lon/} = @{$q}{qw/name lat lon/};
+	if ($c->stash->{poi} = $c->stash->{map}->related_resultset('pois')->create($poi)) {
+	    $c->res->redirect($c->uri_for('/maps', $c->user->id, $c->session->{current_map}, $poi->{name}, 'edit'));
+	} else {
+	    $c->detach(qw/Controller::Error index/);
+	}
+    } else {
+    	$c->detach(qw/Controller::Error index/);
+    }
+}
 
 sub _google_url_to_loc {
     shift;
