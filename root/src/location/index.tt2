@@ -1,10 +1,12 @@
 <script>
 $(function(){
     if ("geolocation" in navigator) {
-	navigator.geolocation.getCurrentPosition(function(position) {
-	    console.log([position.coords.latitude, position.coords.longitude].join(", "));
-	    $('#content').html([position.coords.latitude, position.coords.longitude].join(", "));
-	});	
+	$('#locate').click(function(){
+	    navigator.geolocation.getCurrentPosition(function(position) {
+		console.log([position.coords.latitude, position.coords.longitude].join(", "));
+		$('#content').html([position.coords.latitude, position.coords.longitude].join(", "));
+	    });
+	});
     } else {
 	$('#content').html("geolocation IS NOT available")
     }
@@ -13,9 +15,12 @@ $(function(){
 <div class="container">
   <div class="row">
     <div id="current" class="col-md-12">
-      [% c.session.current_map %]<br />
-      [% c.user.id %]<br />
-      <button id="locate" type="button" class="btn btn-primary btn-lg active">Locate</button>
+      <div>
+	<div id="locate" style="margin-top:3em" type="button" class="btn btn-primary btn-lg active col-md-9 col-md-offset-1">Locate</div>
+	<div class="col-md-12">
+	Your current map is [% c.session.current_map %]<br />
+	[% c.user.id %]<br />
+      </div>
     </div>
     
     <div id="content" class="col-md-12">
