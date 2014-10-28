@@ -1,5 +1,9 @@
+<!-- --- XXX this needs to be fixed -->
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<!-- --- XXX ------ -->
 [% PROCESS 'site/leaflet.tt2' %]
-<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
+<script src="[% c.uri_for('/static') %]/leaflet/leaflet.oxiana-markers.js"></script>
+
 <style>
 #map { height: 640px; margin-top: 32px }
 .leaflet-control i.fa-2x { padding-top: 2px }
@@ -9,20 +13,17 @@
 $(function(){
 var poi = [% c.model('Maps::Pois').search_rs({ map_id => c.stash.map.id }).as_json %];
 
+var redMarker = L.OxianaMarkers.icon({ number: 20 });
+
 var map = L.map('map').setView([poi[0].lat, poi[0].lon ], 13);
-
-L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-L.easyButton('fa-camera', function(){ leafletImage(map, function(err, canvas){
-    $.post("[% c.uri_for('/image') %]", { img: canvas.toDataURL() }) 
-}) }, 'Snap a picture of the map', map );
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
+L.easyButton('fa-camera', function(){ leafletImage(map, function(err, canvas){ $.post("[% c.uri_for('/image') %]", { img: canvas.toDataURL() }) }) }, 'Snap a picture of the map', map );
+var hash = L.hash(map);
 
 _.each(poi, function(e, i){
-    L.marker([e.lat, e.lon]).addTo(map).bindPopup("<b>" + (i+1) + "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/" + e.name + "\">" + e.name + "</a>");
+    L.marker([e.lat, e.lon], { icon: L.OxianaMarkers.icon({ number: i + 1 }) })
+	.addTo(map).bindPopup("<b>" + (i+1) + "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/" + e.name + "\">" + e.name + "</a>");
 });
-var hash = L.hash(map);
 })
 
 

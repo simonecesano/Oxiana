@@ -2,7 +2,7 @@
 <html>
  <head>
   <title>[% template.title or site.title %]</title>
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js"></script>
   <link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/bootstrap/css/bootstrap.min.css">
   <script src="[% c.uri_for('/static') %]/bootstrap/js/bootstrap.min.js"></script>

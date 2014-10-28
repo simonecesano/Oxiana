@@ -30,15 +30,6 @@ extends 'Catalyst';
 
 our $VERSION = '0.01';
 
-# Configure the application.
-#
-# Note that settings in oxiana.conf (or other external
-# configuration file that you set up manually) take precedence
-# over this when using ConfigLoader. Thus configuration
-# details given here can function as a default configuration,
-# with an external configuration file acting as an override for
-# local deployment.
-
 __PACKAGE__->config
     (
      name => 'Oxiana',
@@ -83,8 +74,6 @@ __PACKAGE__->config
 	}
     );
 
-# Start the application
-
 use Log::Log4perl::Catalyst;
 
 __PACKAGE__->log( Log::Log4perl::Catalyst->new() );
@@ -98,34 +87,5 @@ sub uri_for {
     return $uri;
 }
 
-
-=encoding utf8
-
-=head1 NAME
-
-Oxiana - Catalyst based application
-
-=head1 SYNOPSIS
-
-    script/oxiana_server.pl
-
-=head1 DESCRIPTION
-
-[enter your description here]
-
-=head1 SEE ALSO
-
-L<Oxiana::Controller::Root>, L<Catalyst>
-
-=head1 AUTHOR
-
-Cesano, Simone
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 1;
