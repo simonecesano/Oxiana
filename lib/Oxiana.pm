@@ -74,6 +74,18 @@ __PACKAGE__->config
 	}
     );
 
+$\ = "\n";
+
+print STDERR (("#" x 80) . "");
+
+print STDERR __PACKAGE__;
+print STDERR qx(hostname);
+
+$\ = "";
+
+__PACKAGE__->config();
+
+
 use Log::Log4perl::Catalyst;
 
 __PACKAGE__->log( Log::Log4perl::Catalyst->new() );
