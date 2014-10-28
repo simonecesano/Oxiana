@@ -76,21 +76,12 @@ __PACKAGE__->config
 
 $\ = "\n";
 
-print STDERR (("#" x 80) . "");
-
-print STDERR __PACKAGE__;
 my $host = qx(hostname);
-
 if ($host =~ /DEHER/) {
     __PACKAGE__->config( 'Plugin::ConfigLoader' => { file => 'oxiana.conf' } );
 } else {
     __PACKAGE__->config( 'Plugin::ConfigLoader' => { file => 'oxiana_heroku.conf' } );
 }
-
-$\ = "";
-
-__PACKAGE__->config();
-
 
 use Log::Log4perl::Catalyst;
 
