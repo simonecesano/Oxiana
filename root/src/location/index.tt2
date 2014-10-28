@@ -16,7 +16,7 @@ $(function(){
   <div class="row">
     <div id="current" class="col-md-12">
       <div>
-	<div id="locate" style="margin-top:3em" type="button" class="btn btn-primary btn-lg active col-md-9 col-md-offset-1">Locate</div>
+	<div id="locate" style="margin-top:3em" type="button" class="btn btn-primary btn-lg active">Locate</div>
 	<div class="col-md-12">
 	Your current map is [% c.session.current_map %]<br />
 	[% c.user.id %]<br />
