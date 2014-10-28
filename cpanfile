@@ -45,3 +45,6 @@ requires "Config::General";
 requires 'JSON::XS', '3.01';
 requires 'DBIx::Class::InflateColumn::Serializer';
 requires 'DBIx::Class::InflateColumn::Serializer::Hstore';
+
+requires 'URI';
+requires 'URI::Escape';
