@@ -25,10 +25,15 @@ use Data::Dump qw/dump/;
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->res->redirect($c->uri_for("/login")) unless $c->user;
+    $c->stash->{uid} = $c->user->uid;
     $c->stash->{template} = 'home/index.tt2';
 }
 
+sub home :Path :Args(1) {
+    my ( $self, $c, $user ) = @_;
+    $c->stash->{uid} = $user;
+    $c->stash->{template} = 'home/index.tt2';
+}
 
 
 =encoding utf8

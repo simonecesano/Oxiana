@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 use Catalyst::Runtime 5.80;
 
+$|++;
+
 # Set flags and add plugins for the application.
 #
 # Note that ORDERING IS IMPORTANT here as plugins are initialized in order,
@@ -47,34 +49,9 @@ __PACKAGE__->config
 	 no_logs => 1,
 	 logging => 0,
 	},
-     'Plugin::Authentication'
-     => {
-	 default_realm => 'users',
-	 realms
-	 => {
-	     users
-	     => {
-		 credential
-		 => {
-		     class => 'Password',
-		     password_field => 'password',
-		     password_type => 'clear'
-		    },
-		 store
-		 => {
-		     class => 'Minimal',
-		     users
-		     => {
-			 simone => { password => "luca" },
-			 tomas  => { password => "leonardo" }
-			}
-		    }
-		}
-	    }
-	}
     );
 
-$\ = "\n";
+# $\ = "\n";
 
 my $host = qx(hostname);
 if ($host =~ /DEHER/) {

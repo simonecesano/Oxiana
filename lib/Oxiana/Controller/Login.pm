@@ -45,19 +45,21 @@ sub logout :Path('/logout') :Args(0) {
     $c->res->redirect($c->uri_for("/"));
 }
 
+sub oauth :Path Args(1) {
+    my ($self, $c, $provider) = @_;
+    unless ($c->req->params->{code}) {
+	$c->authenticate({ provider => $provider });
+    } else {
+	$c->authenticate({ provider => $provider });
+	#------------------------------
+	# need to redirect somewhere
+	#------------------------------
+	$c->res->redirect($c->uri_for("/maps", $c->user->uid));
 
-=encoding utf8
+	# $c->res->body('authenticated! "'. $c->user->uid . '"');
+    }
+}
 
-=head1 AUTHOR
-
-Cesano, Simone
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 __PACKAGE__->meta->make_immutable;
 

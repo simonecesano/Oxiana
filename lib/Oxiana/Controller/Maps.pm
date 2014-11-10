@@ -25,7 +25,7 @@ sub base :Chained("/") :PathPart("maps") :CaptureArgs(0) {}
 
 sub user :Chained('base') :PathPart('') :Args(1) {
     my ($self, $c, $user) = @_;
-    $c->detach(qw/Controller::Home index/, [ $user ]);
+    $c->detach(qw/Controller::Home home/, [ $user ]);
 }
 
 sub map :Chained('base') :PathPart('') :CaptureArgs(2) {
