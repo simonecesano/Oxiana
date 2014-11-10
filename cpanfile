@@ -48,3 +48,5 @@ requires 'DBIx::Class::InflateColumn::Serializer::Hstore';
 
 requires 'URI';
 requires 'URI::Escape';
+requires 'Net::OAuth2::Profile::WebServer';
+requires 'Catalyst::Authentication::Store::DBIx::Class';
