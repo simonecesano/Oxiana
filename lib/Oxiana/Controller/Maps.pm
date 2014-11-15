@@ -32,7 +32,7 @@ sub map :Chained('base') :PathPart('') :CaptureArgs(2) {
     my ( $self, $c, $user, $map ) = @_;
     $c->stash->{map} = $c->model('Maps::Map')->find({ user_id => $user, name => $map});
     if ($c->stash->{map}) { 
-	$c->session->{current_map} = $map;
+	$c->session->{current_map} = $c->stash->{map}->id;
 	$c->stash->{user} = $user;
     } else {
     	$c->detach(qw/Controller::Error index/);
@@ -99,7 +99,7 @@ use Data::Dump qw/dump/;
 sub poi_add :Path('/poi/add') :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->stash->{map} = $c->model('Maps::Map')->find({ user_id => $c->user->id, name => $c->session->{current_map}});
+    $c->stash->{map} = $c->model('Maps::Map')->find({ id => $c->session->{current_map}});
     $c->detach('add_poi_by_url') if $c->req->params->{url};
     $c->detach('add_poi_by_location') if $c->req->params->{name};
     
