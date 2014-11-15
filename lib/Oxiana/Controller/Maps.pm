@@ -47,7 +47,14 @@ sub map_view :Chained('map') :PathPart('') :Args(0) {
 
 sub map_new :Chained('base') :PathPart('new') :Args(0) {
     my ($self, $c) = @_;
-    $c->stash->{template} = \'making a new map here';
+    $c->stash->{template} = 'maps/new.tt2';
+    if ($c->req->params->{name}) {
+	if (my $m = $c->model('Maps::Map')->create({ user_id => $c->user->uid, name => $c->req->params->{name}})) {
+	    $c->res->redirect($c->uri_for('/maps', $c->user->uid, $c->req->params->{name}))
+	} else {
+	    $c->detach(qw/Controller::Error index/);
+	}
+    }
 }
 
 sub poi :Chained('map') :PathPart('') :CaptureArgs(1) {

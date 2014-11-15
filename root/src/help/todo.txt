@@ -1,0 +1,48 @@
+Main Map
+--------
+
+- add location type icons to list
+- change location icon by type
+- change color for locations that do not have descriptions
+- adjust size to include all points
+- add point to map
+
+POI
+---
+
+- fix buttons style
+- show/hide other things close by
+- add take shot to map
+- add website link
+- add phone number
+- delete poi
+
+location
+--------
+
+- add dropdown to pick map
+
+api
+---
+
+- access maps
+- access pois list
+- access poi
+
+Book
+----
+
+- create
+- add poi
+- sort pois
+- create section break(s) (h1, h2, h3, h4) 
+- add specific section
+- markdown editing
+
+Printing
+--------
+
+- styling
+- test without tables
+- add picture
+- download as tar.gz

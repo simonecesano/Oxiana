@@ -1,0 +1,54 @@
+<style>
+  .control-group { padding-top: 6px; padding-bottom: 6pt }
+</style>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <h2>create a new map</h2>
+    </div>
+    <form method="post">
+      <div class="col-md-4 col-md-offset-2">
+	<div class="control-group">
+          <label for="name">Name:</label>
+          <input name="name" type="text" class="form-control"
+		 id="name"
+		 placeholder="The name of your new map goes here">
+	</div>
+      </div>
+      <div class="col-md-4">
+	<div class="control-group">
+          <label for="location">location:</label>
+          <input name="location" type="text" class="form-control"
+		 id="location"
+		 placeholder="The city, region or country your map is about">
+        </div>
+      </div>
+      <div class="col-md-6  col-md-offset-2">
+	<div class="control-group">
+          <label for="location">editing:</label>
+          <input name="location" type="text" class="form-control"
+		 id="location"
+		 placeholder="enter the email of who is allowed to edit this map">
+        </div>
+      </div>
+      <div class="col-md-2">
+	<div class="control-group">
+	  <label class="control-label" for="radios">This map is private</label>
+	  <div class="controls">
+	    <label class="radio-inline" for="radios-0"><input name="radios" id="radios-0" value="yes" checked="checked" type="radio">yes</label>
+	    <label class="radio-inline" for="radios-1"><input name="radios" id="radios-1" value="no" type="radio">No</label>
+	  </div>
+	</div>
+      </div>
+      <div class="col-md-8 col-md-offset-2">
+	<div class="control-group">
+	  <label class="control-label" for="save"></label>
+	  <div class="controls">
+	    <button id="save" name="save" class="btn btn-success">create map</button>
+	    <button id="cancel" name="cancel" class="btn btn-warning">cancel</button>
+	  </div>
+	</div>
+      </div>
+    </form>
+  </div>
+</div>

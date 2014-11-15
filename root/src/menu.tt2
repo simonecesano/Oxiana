@@ -15,6 +15,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Maps<span class="caret"></span></a>
           <ul class="dropdown-menu" aria-labelledby="themes">
             <li><a href="[% c.uri_for('/home') %]">View your maps</a></li>
+	    <li><a href="[% c.uri_for('/maps/new') %]">Create a new map</a></li>
 	    <li role="presentation" class="divider"></li>
             <li><a href="[% c.uri_for('/search') %]">Search for maps</a></li>
 	  </ul>
