@@ -59,7 +59,8 @@ sub end :Private {
     my ($self, $c) = @_;
     my $json = JSON->new;
     $c->res->content_type('application/json');
-    $c->res->body($json->allow_nonref(1)->encode($c->stash->{res}));
+    $c->res->body($json->utf8(1)->allow_nonref(1)->encode($c->stash->{res}));
+    # $c->res->body(dump $c->stash->{res});
 }
 
 =encoding utf8

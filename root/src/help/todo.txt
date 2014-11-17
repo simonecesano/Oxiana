@@ -25,9 +25,9 @@ location
 api
 ---
 
-- access maps
-- access pois list
-- access poi
+- access maps (done)
+- access pois list (done)
+- access poi (done)
 
 Book
 ----

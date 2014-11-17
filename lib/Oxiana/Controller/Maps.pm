@@ -61,6 +61,8 @@ use Hash::Merge qw( merge );
 sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
     my ( $self, $c ) = @_;
     if (keys %{$c->req->params}) {
+	# editor contains the editor source
+	# this cleans up the HTML
 	my $h = $c->req->params->{editor};
 	$h =~ s/\n/ /g;
 	$c->stash->{poi}->description($h);
@@ -76,6 +78,22 @@ sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
 	$c->stash->{poi}->update;
     } 
     $c->stash->{template} = 'pois/edit.tt2';
+}
+
+use Try::Tiny;
+
+sub poi_delete  :Chained('poi') :PathPart('delete') :Args(0) {
+    my ( $self, $c ) = @_;
+    $c->log->info(ref $c->stash->{poi});
+    my $map = $c->stash->{map};
+    try {
+	
+	$c->stash->{poi}->delete;
+	# $c->res->body("done");
+	$c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name));
+    } catch {
+	$c->detach(qw/Controller::Error index/);
+    }
 }
 
 use URI::Escape;
