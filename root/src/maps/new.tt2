@@ -1,3 +1,34 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/jquery/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/jquery/jquery-ui.structure.css">
+<script src="[% c.uri_for('/static') %]/jquery/jquery-ui.js"></script>
+<script>
+    $(function(){
+	var places;
+	$('#location').focusout(function(e){
+	    if (!$('#lat').val() && !$('#lon').val()) {
+		$.getJSON( "http://nominatim.openstreetmap.org/search",
+			   { q: $(this).val(), format: 'json' },
+			   function(d) {
+			       places = { places: d };
+			       console.log(places.places.length);
+			       if (places.places.length > 1) {
+				   var template = Handlebars.compile($("#choose_place_tpl").html());
+				   $('#choose_place .modal-body').html(template(places));
+				   $('#choose_place').modal('toggle')
+				   $('#choose_place p').click(function(){
+				       $('#lat').val($(this).find('.lat').html())
+				       $('#lon').val($(this).find('.lon').html())
+				       $('#choose_place').modal('toggle')
+				   })
+			       } else {
+				   console.log(places.places.length);
+			       }
+			   });
+	    }
+	})
+    })
+</script>
 <style>
   .control-group { padding-top: 6px; padding-bottom: 6pt }
 </style>
@@ -9,13 +40,13 @@
     <form method="post">
       <div class="col-md-4 col-md-offset-2">
 	<div class="control-group">
-          <label for="name">Name:</label>
+          <label for="name">name:</label>
           <input name="name" type="text" class="form-control"
 		 id="name"
 		 placeholder="The name of your new map goes here">
 	</div>
       </div>
-      <div class="col-md-4">
+            <div class="col-md-4">
 	<div class="control-group">
           <label for="location">location:</label>
           <input name="location" type="text" class="form-control"
@@ -25,18 +56,26 @@
       </div>
       <div class="col-md-6  col-md-offset-2">
 	<div class="control-group">
-          <label for="location">editing:</label>
-          <input name="location" type="text" class="form-control"
-		 id="location"
+          <label for="edit">editing:</label>
+          <input name="edit" type="text" class="form-control"
+		 id="edit"
 		 placeholder="enter the email of who is allowed to edit this map">
         </div>
       </div>
       <div class="col-md-2">
 	<div class="control-group">
-	  <label class="control-label" for="radios">This map is private</label>
+	  <label class="control-label" for="public">This map is private</label>
 	  <div class="controls">
-	    <label class="radio-inline" for="radios-0"><input name="radios" id="radios-0" value="yes" checked="checked" type="radio">yes</label>
-	    <label class="radio-inline" for="radios-1"><input name="radios" id="radios-1" value="no" type="radio">No</label>
+	    <label class="radio-inline" for="public-0"><input name="public" id="public-0" value="yes" checked="checked" type="radio">yes</label>
+	    <label class="radio-inline" for="public-1"><input name="public" id="public-1" value="no" type="radio">No</label>
+	  </div>
+	</div>
+      </div>
+      <div class="col-md-1">
+	<div class="control-group">
+	  <div class="controls">
+	    <input name="lon" type="hidden" class="form-control" id="lon">
+	    <input name="lat" type="hidden" class="form-control" id="lat">
 	  </div>
 	</div>
       </div>
@@ -50,5 +89,27 @@
 	</div>
       </div>
     </form>
+  </div>
+</div>
+<script id="choose_place_tpl" type="text/x-handlebars-template">
+  <style>.lon, .lat { display: none }</style>
+   {{#each places}}
+   <p class="place">{{this.display_name}}<span class="lat">{{this.lat}}</span><span class="lon">{{this.lon}}</span></p>
+   {{/each}}
+</script>
+<div id="choose_place" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Did you mean...</h4>
+      </div>
+      <div class="modal-body">
+	<p>the place you chose could be one of these:</p>
+      </div>
+      <div class="modal-footer">
+	click on the correct one, please
+      </div>
+    </div>
   </div>
 </div>

@@ -36,15 +36,10 @@ _.each(poi, function(e, i){
       <div id="map"></div>
     </div>
     <div class="col-md-12">
-<table style="display:none">
-  [% FOR p = c.model('Maps::Pois').search({ map_id => c.stash.map.id }) %]
-  <tr><td>[% p.name %]</td><td></td><td></td></tr>
-  [% END %]
-</table>
 <div style="-webkit-column-count:4;-moz-column-count:4;column-count:4;">
   <ol>
   [% FOR p = c.model('Maps::Pois').search({ map_id => c.stash.map.id }) %]
-  <li><a href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% p.name %]">[% p.name %]</li>
+  <li><a href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% p.name %]">[% p.name %]</a></li>
   [% END %]
   </ol>
 </div>

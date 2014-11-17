@@ -13,7 +13,8 @@ Oxiana::Data::Maps::Result::Picture
 use strict;
 use warnings;
 
-use base 'DBIx::Class::Core';
+use base 'Oxiana::Data::Maps::Result';
+#use base 'DBIx::Class::Core';
 
 =head1 TABLE: C<pictures>
 

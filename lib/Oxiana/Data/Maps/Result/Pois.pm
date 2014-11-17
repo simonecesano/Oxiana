@@ -4,7 +4,8 @@ package Oxiana::Data::Maps::Result::Pois;
 use strict;
 use warnings;
 
-use base 'DBIx::Class::Core';
+use base 'Oxiana::Data::Maps::Result';
+# use base 'DBIx::Class::Core';
 
 __PACKAGE__->table("pois");
 
@@ -31,11 +32,23 @@ __PACKAGE__->add_columns(
   { 
    data_type => "text", is_nullable => 1,
    serializer_class => 'JSON',
+   # is_serializable   => 1,
   },
 );
 
 __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->resultset_class('Oxiana::Data::Maps::ResultClass::Pois');
+
+sub has_description {
+    my $self = shift;
+    return $self->description && length($self->description) > 0 ? 1 : 0;
+}
+
+sub TO_JSON {
+    my $self = shift;
+    return { has_description => $self->has_description, %{ $self->next::method } }
+}
+
 
 1;

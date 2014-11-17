@@ -9,7 +9,8 @@ use MooseX::MarkAsMethods autoclean => 1;
 # use MooseX::NonMoose; # this is important for correctly handling DBIx::Class' new
 
 # extends qw/DBIx::Class::Core Catalyst::Authentication::User/;
-extends qw/DBIx::Class::Core/;
+# extends qw/DBIx::Class::Core/;
+extends 'Oxiana::Data::Maps::Result';
 sub name { return shift->username };
 
 __PACKAGE__->table("users");

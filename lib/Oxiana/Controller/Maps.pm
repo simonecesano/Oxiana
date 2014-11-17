@@ -4,23 +4,6 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-=head1 NAME
-
-Oxiana::Controller::Maps - Catalyst Controller
-
-=head1 DESCRIPTION
-
-Catalyst Controller.
-
-=head1 METHODS
-
-=cut
-
-
-=head2 index
-
-=cut
-
 sub base :Chained("/") :PathPart("maps") :CaptureArgs(0) {}
 
 sub user :Chained('base') :PathPart('') :Args(1) {
@@ -50,6 +33,9 @@ sub map_new :Chained('base') :PathPart('new') :Args(0) {
     $c->stash->{template} = 'maps/new.tt2';
     if ($c->req->params->{name}) {
 	if (my $m = $c->model('Maps::Map')->create({ user_id => $c->user->uid, name => $c->req->params->{name}})) {
+	    $m->center_lat($c->req->params->{lat});
+	    $m->center_lon($c->req->params->{lon});
+	    $m->update;
 	    $c->res->redirect($c->uri_for('/maps', $c->user->uid, $c->req->params->{name}))
 	} else {
 	    $c->detach(qw/Controller::Error index/);
@@ -99,6 +85,8 @@ use Data::Dump qw/dump/;
 sub poi_add :Path('/poi/add') :Args(0) {
     my ( $self, $c ) = @_;
 
+    $c->log->info("Current map " . $c->session->{current_map});
+    
     $c->stash->{map} = $c->model('Maps::Map')->find({ id => $c->session->{current_map}});
     $c->detach('add_poi_by_url') if $c->req->params->{url};
     $c->detach('add_poi_by_location') if $c->req->params->{name};
@@ -111,8 +99,9 @@ sub add_poi_by_url :Private {
     $c->detach(qw/Controller::Error index/) unless ($poi->{name} && defined $poi->{lat} && defined $poi->{lon});
 
     $c->log->info(dump $poi);
+    my $map = $c->stash->{map};
     if ($c->stash->{poi} = $c->stash->{map}->related_resultset('pois')->create($poi)) {
-	$c->res->redirect($c->uri_for('/maps', $c->user->id, $c->session->{current_map}, $poi->{name}, 'edit'));
+	$c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name, $poi->{name}, 'edit'));
     } else {
     	$c->detach(qw/Controller::Error index/);
     }
@@ -121,10 +110,12 @@ sub add_poi_by_url :Private {
 sub add_poi_by_location :Private {
     my ( $self, $c ) = @_;
     my $q = $c->req->params;
+    my $map = $c->stash->{map};
     if ($q->{name} && defined $q->{lat} && defined $q->{lon}) {
 	my $poi = {}; @{$poi}{qw/name lat lon/} = @{$q}{qw/name lat lon/};
-	if ($c->stash->{poi} = $c->stash->{map}->related_resultset('pois')->create($poi)) {
-	    $c->res->redirect($c->uri_for('/maps', $c->user->id, $c->session->{current_map}, $poi->{name}, 'edit'));
+	if ($c->stash->{poi} = $map->related_resultset('pois')->create($poi)) {
+	    # XXXX this is messy, and it should be refactored with add_poi_by_url
+	    $c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name, $poi->{name}, 'edit'));
 	} else {
 	    $c->detach(qw/Controller::Error index/);
 	}
@@ -147,19 +138,20 @@ sub _google_url_to_loc {
     return $r;
 }
 
-=encoding utf8
+sub foobar :Path('/foobar') {
+    my ($self, $c) = @_;
 
-=head1 AUTHOR
+    $c->stash->{r} = [qw/vicenza amsterdam erlangen treviso venezia berlin/];
+    $c->forward('View::JSON');
 
-Cesano, Simone
+}
 
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
 
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+
+__DATA__
+
+http://nominatim.openstreetmap.org/search?q=amsterdam&format=json
