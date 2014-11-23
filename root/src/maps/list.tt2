@@ -8,8 +8,13 @@
 <style>
 #map { height: 640px; margin-top: 32px }
 .leaflet-control i.fa-2x { padding-top: 2px }
-.leaflet-control i.fa-lg { padding-top: 7px }
+    .leaflet-control i.fa-lg { padding-top: 7px }
 </style>
+<script id="nre_poi_tpl" type="text/x-handlebars-template">
+  var c = ['rgb(166,206,227)','rgb(31,120,180)','rgb(178,223,138)','rgb(51,160,44)',
+  'rgb(251,154,153)','rgb(227,26,28)','rgb(253,191,111)','rgb(255,127,0)',
+   'rgb(202,178,214)','rgb(106,61,154)','rgb(255,255,153)','rgb(177,89,40)']
+</script>
 <script type="text/javascript">
     $(function(){
 	$.getJSON(
@@ -26,12 +31,23 @@
 		var hash = L.hash(map);
 		var marker_group = [];
 		_.each(poi, function(e, i){
-		    var m = L.marker([e.lat, e.lon], { icon: L.OxianaMarkers.icon({ number: i + 1 }) })
+		    var o = { number: i + 1, markerColor: 'darkred' };
+		    if (e.has_description == 1) { o.markerColor = 'blue' };
+		    var m = L.marker([e.lat, e.lon], { icon: L.OxianaMarkers.icon(o) })
+		    console.log(e.has_description);
 		    m.addTo(map).bindPopup("<b>" + (i+1) + "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/" + e.name + "\">" + e.name + "</a>");
 		    marker_group.push(m);
 		});
 		marker_group = new L.featureGroup(marker_group);
 		map.fitBounds(marker_group.getBounds());
+		// map.on('click', function(e){
+		//     var popup = L.popup();
+		//     popup
+		// 	.setLatLng(e.latlng)
+		// 	.setContent('You clicked the map at <input type="text" name="lastname">' + e.latlng.toString())
+		// 	.openOn(map);
+		// })
+		
 		var template = Handlebars.compile($("#poi_list_tpl").html());
 		$('#poi_list').html(template({ places: poi}));
 	    });
@@ -57,4 +73,4 @@
     </div>
   </div>
 </div>
-  
+	    

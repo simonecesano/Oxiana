@@ -1,3 +1,9 @@
+general
+--------
+
+- fix current map
+- refactor poi controller
+
 Main Map
 --------
 
