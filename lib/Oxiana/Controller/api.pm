@@ -25,6 +25,8 @@ sub tables :Chained('base') :PathPart('') :Args(1) {
 
 sub item :Chained('base') :PathPart('') :CaptureArgs(2) {
     my ( $self, $c, $model, $table ) = @_;
+
+    $c->log->info(join ' ', 'Model and table:', $model, $table);
     $c->stash->{search} = $c->model("$model::$table");
 }
 
