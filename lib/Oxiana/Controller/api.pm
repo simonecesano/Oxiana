@@ -15,6 +15,13 @@ sub index :Path :Args(0) {
     $c->response->body('nothing to look at here');
 }
 
+sub error :Private {
+    my ( $self, $c, $status, $message ) = @_;
+    $c->stash->{res}->{status} = $status;
+    $c->stash->{res}->{message} = $message;
+    $c->detach;
+}
+
 sub base :Chained("/") :PathPart("api") :CaptureArgs(0) {}
 
 sub tables :Chained('base') :PathPart('') :Args(1) {
@@ -27,7 +34,8 @@ sub item :Chained('base') :PathPart('') :CaptureArgs(2) {
     my ( $self, $c, $model, $table ) = @_;
 
     $c->log->info(join ' ', 'Model and table:', $model, $table);
-    $c->stash->{search} = $c->model(join '::', $model, $table);
+    $c->stash->{search} = $c->model(join '::', $model, $table)
+	|| $c->forward('error', [ 404, "Model $model and table $table not found" ])
 }
 
 
@@ -39,7 +47,7 @@ sub list_view :Chained('item') :PathPart('') :Args(0) {
 
     my $search =  $c->stash->{search};
 
-    $c->detach(qw/Controller::Error index/) unless defined $search;
+    $c->forward('error', [ 404, "Item not found" ]) unless defined $search;
 
     for (grep { length > 1 } keys %{$c->req->params}) { $q->{$_} = $c->req->params->{$_} }
     $c->stash->{res} = [ map { $_->TO_JSON } $search->search($q)->all ];
@@ -53,7 +61,7 @@ sub item_view :Chained('item') :PathPart('') {
     if ($c->stash->{res} = $search->find({ zip @keys, @args })) {
 	$c->stash->{res} = $c->stash->{res}->TO_JSON;
     } else {
-	$c->detach(qw/Controller::Error index/);
+	$c->forward('error', [ 404, "Item not found" ])
     }
 }
 
@@ -62,7 +70,6 @@ sub end :Private {
     my $json = JSON->new;
     $c->res->content_type('application/json');
     $c->res->body($json->utf8(1)->allow_nonref(1)->encode($c->stash->{res}));
-    # $c->res->body(dump $c->stash->{res});
 }
 
 =encoding utf8
