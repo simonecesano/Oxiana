@@ -1,3 +1,4 @@
+<link href="[% c.uri_for('/static') %]/fontawesome/css/font-awesome-oxiana.css" rel="stylesheet">
 <!-- --- XXX this needs to be fixed -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -64,7 +65,9 @@
       <div style="-webkit-column-count:4;-moz-column-count:4;column-count:4;">
 	<script id="poi_list_tpl" type="text/x-handlebars-template">
 	  {{#each places}}
-	  <li><a href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/{{this.name}}">{{this.name}}</a></li>
+	  <li>
+	    <a href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/{{this.name}}">{{this.name}}</a>{{#if this.poi_type}} <i class="fa fa-{{this.poi_type}}"></i>{{/if}}
+	  </li>
 	  {{/each}}
 	</script>
 	<ol id="poi_list">
