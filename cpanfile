@@ -8,6 +8,7 @@ requires "Catalyst";
 requires "Catalyst::Runtime";
 requires "Catalyst::ScriptRunner";
 requires "Data::Dump";
+requires "List::AllUtils";
 requires "JSON";
 requires "LWP::Simple", '6.00';
 
