@@ -60,10 +60,10 @@ __PACKAGE__->has_many('pois' => 'Oxiana::Data::Maps::Result::Pois',
 
 sub has_rights {
     my ($self, $user, $rights) = @_;
-    return 1 if $self->can_read = '*';
+    return 1 if $self->can_read eq '*';
 
     my $uid = ref $user ? $user->uid : $user;
-    return 1 if $self->user_id = $uid;
+    return 1 if $self->user_id eq $uid;
 
     $uid = quotemeta($uid);
     return $self->can_read =~ /$uid/;
