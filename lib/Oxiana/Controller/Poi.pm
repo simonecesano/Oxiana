@@ -5,6 +5,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use URI;
+use URI::Escape;
 use Data::Dump qw/dump/;
 
 sub index :Path :Args(0) {

@@ -17,10 +17,6 @@ requires "IO::Socket::SSL";
 requires "XML::Simple";
 requires "XML::XPath";
 
-requires "URI::QueryParam";
-requires "URI";
-
-
 requires "Catalyst::Plugin::ConfigLoader";
 requires 'Catalyst::Action::RenderView', '0.16';
 requires "Catalyst::Plugin::Static::Simple";
@@ -49,6 +45,7 @@ requires 'DBIx::Class::Helper::Row::ToJSON';
 
 requires 'URI';
 requires 'URI::Escape';
+requires "URI::QueryParam";
 requires 'Net::OAuth2::Profile::WebServer';
 requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'DateTime';
