@@ -35,11 +35,10 @@ sub index :Path :Args(0) {
     $c->forward('View::HTML');
 }
 
-=head2 default
-
-Standard 404 error page
-
-=cut
+sub auto :Private {
+    my ( $self, $c ) = @_;
+    $c->log->info('here');
+}
 
 sub default :Path {
     my ( $self, $c ) = @_;
