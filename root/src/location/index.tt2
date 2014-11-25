@@ -1,5 +1,8 @@
 <script src="[% c.uri_for('/static') %]/lib/URI.js"></script>
 <script src="[% c.uri_for('/static') %]/lib/spin.min.js"></script>
+<script src="[% c.uri_for('/static') %]/bootstrap/js/bootstrap-select.min.js"></script>
+<link href="[% c.uri_for('/static') %]/bootstrap/css/bootstrap-select.min.css" rel="stylesheet">
+
 <script>
 $(function(){
     if (URI().search().length > 0) { window.location.href = URI().search('').toString() }
@@ -29,13 +32,24 @@ $(function(){
     <div id="add" class="col-md-12">
       <form role="form">
 	<div id="content"></div>
-	<div class="col-md-6">
+	<div class="col-md-8 col-md-offset-2">
 	  <div class="form-group">
             <label for="name">Place:</label>
             <input name="name" type="text" class="form-control" id="name">
           </div>
         </div>
-	<div class="col-md-2">
+
+	<div class="col-md-8 col-md-offset-2">
+	  <div class="form-group">
+            <label for="map">Map:</label>
+	    <select class="selectpicker" data-style="btn-inverse" name="map" id="map">
+	      [% FOR m = c.model('Maps::Map').search({ 'user_id' => c.user.uid }) %]
+	      <option value="[% m.id %]">[% m.name %]</option>
+	      [% END %]
+	    </select>
+	  </div>
+	</div>
+	<div class="col-md-2 col-md-offset-2">
 	  <div class="form-group">
             <label for="lat">latitude:</label>
             <input name="lat" type="text" class="form-control" id="lat">
@@ -47,7 +61,7 @@ $(function(){
             <input name="lon" type="text" class="form-control" id="lon">
           </div>
         </div>
-	<div class="col-md-12">
+	<div class="col-md-8  col-md-offset-2">
 	  <button id="save" type="submit" class="btn btn-primary btn-lg active">Save location</button>
 	</div>
       </form>
