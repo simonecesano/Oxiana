@@ -17,42 +17,44 @@
    'rgb(202,178,214)','rgb(106,61,154)','rgb(255,255,153)','rgb(177,89,40)']
 </script>
 <script type="text/javascript">
-    $(function(){
-	$.getJSON(
-	    "[% c.uri_for('/api/maps/pois') %]",
-	    { 'map_id': 	[% c.stash.map.id %] },
-	    function(poi) {
-		var redMarker = L.OxianaMarkers.icon({ number: 20 });
-		var map = L.map('map').setView([poi[0].lat, poi[0].lon ], 13);
-		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
-		L.easyButton('fa-camera', function(){ leafletImage(map,
-								   function(err, canvas){
-								       $.post("[% c.uri_for('/image') %]", { img: canvas.toDataURL() }) })
-						    }, 'Snap a picture of the map', map );
-		var hash = L.hash(map);
-		var marker_group = [];
-		_.each(poi, function(e, i){
-		    var o = { number: i + 1, markerColor: 'darkred' };
-		    if (e.has_description == 1) { o.markerColor = 'blue' };
-		    var m = L.marker([e.lat, e.lon], { icon: L.OxianaMarkers.icon(o) })
-		    console.log(e.has_description);
-		    m.addTo(map).bindPopup("<b>" + (i+1) + "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/" + e.name + "\">" + e.name + "</a>");
-		    marker_group.push(m);
-		});
-		marker_group = new L.featureGroup(marker_group);
-		map.fitBounds(marker_group.getBounds());
-		// map.on('click', function(e){
-		//     var popup = L.popup();
-		//     popup
-		// 	.setLatLng(e.latlng)
-		// 	.setContent('You clicked the map at <input type="text" name="lastname">' + e.latlng.toString())
-		// 	.openOn(map);
-		// })
-		
-		var template = Handlebars.compile($("#poi_list_tpl").html());
-		$('#poi_list').html(template({ places: poi}));
+$(function(){
+    var redMarker = L.OxianaMarkers.icon({ number: 20 });
+    var map = L.map('map').setView([ 0, 0 ], 1);
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
+    L.easyButton('fa-camera',
+		 function(){
+		     leafletImage(map,
+				  function(err, canvas){
+				      $.post("[% c.uri_for('/image') %]", { img: canvas.toDataURL() }) })
+		 }, 'Snap a picture of the map', map );
+    var hash = L.hash(map);
+    $.getJSON(
+	"[% c.uri_for('/api/maps/pois') %]",
+	{ 'map_id': 	[% c.stash.map.id %] },
+	function(poi) {
+	    var marker_group = [];
+	    _.each(poi, function(e, i){
+		var o = { number: i + 1, markerColor: 'darkred' };
+		if (e.has_description == 1) { o.markerColor = 'blue' };
+		var m = L.marker([e.lat, e.lon], { icon: L.OxianaMarkers.icon(o) })
+		// console.log(e.has_description);
+		m.addTo(map).bindPopup("<b>" + (i+1) + "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/" + e.name + "\">" + e.name + "</a>");
+		marker_group.push(m);
 	    });
-    })
+	    marker_group = new L.featureGroup(marker_group);
+	    map.fitBounds(marker_group.getBounds());
+	    // map.on('click', function(e){
+	    //     var popup = L.popup();
+	    //     popup
+	    // 	.setLatLng(e.latlng)
+	    // 	.setContent('You clicked the map at <input type="text" name="lastname">' + e.latlng.toString())
+	    // 	.openOn(map);
+	    // })
+	    
+	    var template = Handlebars.compile($("#poi_list_tpl").html());
+	    $('#poi_list').html(template({ places: poi}));
+	});
+})
 </script>
 
 <div class="container">
