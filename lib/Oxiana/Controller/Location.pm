@@ -24,7 +24,7 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
     if ($c->req->params->{name}) {
-	$c->detach(qw/Controller::Maps poi_add/);
+	$c->detach(qw/Controller::Poi add/);
     }
 }
 
