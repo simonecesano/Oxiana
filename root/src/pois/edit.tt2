@@ -15,7 +15,34 @@
   "supermarket",
 ]
 -%]
-
+[% PROCESS 'site/leaflet.tt2' %]
+[% poi = c.stash.poi %]
+<script>
+$(function(){
+    var map = L.map('map').setView([ [% poi.lat %], [% poi.lon %] ], 18);
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    L.marker(
+	[[% poi.lat %], [% poi.lon %]],
+	{ draggable: true }
+    )
+	.addTo(map)
+	.bindPopup("[% poi.name %]")
+	.on('dragend', function(event){
+	    var marker = event.target;
+	    var position = marker.getLatLng();
+	    console.log(position)
+	    $('#lat').val(position.lat);
+	    $('#lon').val(position.lng);
+	})
+});
+</script>
+<style>
+#map { height: 480px; margin-top: 24px }
+.leaflet-control i.fa-2x { padding-top: 2px }
+.leaflet-control i.fa-lg { padding-top: 7px }
+</style>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.4.1/ckeditor.js"></script>
 <div class="container">
   <div class="row">
@@ -26,37 +53,36 @@
       <ul class="nav nav-tabs">
 	<li><a role="tab" data-toggle="tab" href="#address">Address</a></li>
 	<li><a role="tab" data-toggle="tab" href="#description">Description</a></li>
-	<li><a role="tab" data-toggle="tab" href="#map">Map</a></li>
       </ul>
       <div class="tab-content">
 	<div id="address" class="col-md-12 tab-pane active">
 	  <div class="col-md-6"><div class="form-group">
+	      <input type="hidden" name="lat" id="lat" value=[% poi.lat %]>
+	      <input type="hidden" name="lon" id="lon" value=[% poi.lon %]>
               <label for="address">Address:</label>
               <textarea rows="5" name="address" type="text" class="form-control" id="address">[% c.stash.poi.extended_data.address %]</textarea>
             </div>
 	    <div class="form-group">
 	      <label>POI type:&emsp;</label>
 	      [% FOR t = poi_types %]
-	      <div style="display:inline-block" class="radio">[% x = x + 1%]
+	      <div style="display:inline-block" class="radio">[% x = x + 1 %]
 		<label><input type="radio" name="poi_type" id="opt[% x %]" value="[% t %]" [% IF t.match(c.stash.poi.poi_type) %][% 'checked' %][% END %]>[% t %]</label>
 	      </div>	      
 	      [% END %]
 	    </div>
-	  </div>
-	  <div class="col-md-6">
 	    <div class="form-group">
               <label for="hours">Hours:</label>
               <textarea rows="8" name="hours" type="text" class=
 			"form-control" id="hours">[% c.stash.poi.extended_data.hours %]</textarea>
             </div>
 	  </div>
+	  <div class="col-md-6">
+	    <div id="map"></div>
+	  </div>
 	</div>
 	<div id="description" class="col-md-12 tab-pane">
           <span style="margin:6px"><textarea name="editor" id="editor" rows="30" cols="80">[% c.stash.poi.description %]</textarea></span>
           <script>CKEDITOR.replace( 'editor' )</script>
-	</div>
-	<div id="map" class="col-md-12 tab-pane">
-	  there is a map here
 	</div>
       </div>
       <div class="col-md-12">
