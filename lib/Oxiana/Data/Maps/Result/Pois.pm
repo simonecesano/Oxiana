@@ -25,7 +25,7 @@ __PACKAGE__->add_columns(
   "poi_type",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "description",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text", is_nullable => 1, is_serializable => 1 },
   "saved",
   { data_type => "integer", is_nullable => 1 },
   "extended_data",

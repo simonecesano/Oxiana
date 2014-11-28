@@ -1,4 +1,3 @@
-<link href="[% c.uri_for('/static') %]/fontawesome/css/font-awesome-oxiana.css" rel="stylesheet">
 <script src="[% c.uri_for('/static') %]/lib/handlebars.min.js"></script>
 [% PROCESS 'site/leaflet.tt2' %]
 <script src="[% c.uri_for('/static') %]/leaflet/leaflet.oxiana-markers.js"></script>
@@ -42,15 +41,27 @@
 		    m.addTo(map).bindPopup("<b>" + (i+1) + "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/" + e.name + "\">" + e.name + "</a>");
 		    marker_group.push(m);
 		    markers['m' + e.id] = m;
-		    console.log($(m._icon).parent().html());
+		    console.log('m' + e.id);
 		});
 		marker_group = new L.featureGroup(marker_group);
 		map.fitBounds(marker_group.getBounds());
-		
+		console.log(markers);
 		var template = Handlebars.compile($("#poi_list_tpl").html());
 		$('#poi_list').html(template({ places: poi}));
 		$('li.poi').hover(
-		    function(e) { console.log(this.Id) }
+		    function(e) {
+			// console.log(this.id);
+			var m = $(markers[this.id]._icon)
+			// m.removeClass('awesome-marker-icon-darkred').toggleClass('awesome-marker-icon-orange')
+			// console.log($(markers[this.id]._icon).parent().html())
+		    },
+		    function(e) {
+			// console.log(this.id);
+			var m = $(markers[this.id]._icon)
+			m.toggleClass('awesome-marker-icon-darkred').toggleClass('awesome-marker-icon-orange')
+			// console.log($(markers[this.id]._icon).parent().html())
+		    },
+		    
 		);
 		console.log(markers);
 	    });
@@ -67,8 +78,8 @@
       <div style="-webkit-column-count:4;-moz-column-count:4;column-count:4;">
 	<script id="poi_list_tpl" type="text/x-handlebars-template">
 	  {{#each places}}
-	  <li class="poi">
-	    <a id="m{{this.id}}" href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/{{this.name}}">{{this.name}}</a>{{#if this.poi_type}} <i class="fa fa-{{this.poi_type}}"></i>{{/if}}
+	  <li id="m{{this.id}}" class="poi">
+	    <a href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/{{this.name}}">{{this.name}}</a>{{#if this.poi_type}} <i class="fa fa-{{this.poi_type}}"></i>{{/if}}
 	  </li>
 	  {{/each}}
 	</script>
