@@ -35,9 +35,24 @@ sub index :Path :Args(0) {
     $c->forward('View::HTML');
 }
 
+use Try::Tiny;
 sub auto :Private {
     my ( $self, $c ) = @_;
-    $c->log->info('here');
+    $c->log->info(('-' x 40) . " user " . ('-' x 40));
+
+    $c->log->info($c->action->private_path);
+    $c->log->info($c->req->path);
+    $c->log->info($c->action->reverse);
+    
+    unless ($c->action->private_path =~ /\/index^/
+	    || $c->action->private_path =~ /\/login^/) {
+	$c->log->info("would be redirected");
+    }
+    try {
+	$c->log->info($c->user->uid);
+    } catch {
+	$c->log->info("not logged in");
+    }
 }
 
 sub default :Path {
