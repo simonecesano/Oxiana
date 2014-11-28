@@ -1,7 +1,7 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <div class="col-md-8">
+        <div class="col-md-8 col-xs-8">
           <h1>Hello, traveller!</h1>
           <p>Oxiana helps you create your personalized travel
             guides. We help you map your routes, keep track of your plans, organize your notes and
@@ -11,7 +11,7 @@
 	  as a souvenir of your experience</p>
           <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-4 col-xs-4">
 	  <img src="[% c.uri_for('/static/') %]images/world.png">
 	</div>
       </div>
@@ -20,7 +20,7 @@
     <div class="container">
       <!-- Example row of columns -->
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-4">
           <h2>Plan your trip</h2>
           <p>You can collect content from various sources such as
           Google Maps, Wikipedia, Flickr, Booking.com or TripAdvisor, or write
@@ -29,14 +29,14 @@
 	    your trip</p>
           <p><a class="btn btn-default" href="[% c.uri_for('/plan') %]"  role="button">View details &raquo;</a></p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-4">
           <h2>Organize your routes</h2>
           <p>You can organize the information the way you want, but
           our auto-guide tools will help you group features close by,
           and make sure you do not waste time searching for your favourite destinations.</p>
           <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
        </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-4">
           <h2>Take it with you</h2>
           <p>The information you collected is always at your
           fingertips online, or as an off-line app for your phone or

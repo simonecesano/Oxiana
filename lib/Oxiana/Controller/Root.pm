@@ -44,9 +44,11 @@ sub auto :Private {
     $c->log->info($c->req->path);
     $c->log->info($c->action->reverse);
     
-    unless ($c->action->private_path =~ /\/index^/
-	    || $c->action->private_path =~ /\/login^/) {
+    unless ($c->action->private_path =~ /\/index/
+	    || $c->action->private_path =~ /\/login/) {
 	$c->log->info("would be redirected");
+    } else {
+	$c->log->info("would not be redirected");
     }
     try {
 	$c->log->info($c->user->uid);
