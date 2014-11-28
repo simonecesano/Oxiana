@@ -49,19 +49,6 @@
 		var template = Handlebars.compile($("#poi_list_tpl").html());
 		$('#poi_list').html(template({ places: poi}));
 		$('li.poi').hover(
-		    function(e) {
-			// console.log(this.id);
-			var m = $(markers[this.id]._icon)
-			// m.removeClass('awesome-marker-icon-darkred').toggleClass('awesome-marker-icon-orange')
-			// console.log($(markers[this.id]._icon).parent().html())
-		    },
-		    function(e) {
-			// console.log(this.id);
-			var m = $(markers[this.id]._icon)
-			m.toggleClass('awesome-marker-icon-darkred').toggleClass('awesome-marker-icon-orange')
-			// console.log($(markers[this.id]._icon).parent().html())
-		    },
-		    
 		);
 		console.log(markers);
 	    });
