@@ -2,31 +2,31 @@ general
 --------
 
 - fix current map
-- refactor poi controller
+- refactor poi controller (done)
 
 Main Map
 --------
 
-- add location type icons to list
+- add location type icons to list (done)
 - change location icon by type
-- change color for locations that do not have descriptions
-- adjust size to include all points
+- change color for locations that do not have descriptions (done)
+- adjust size to include all points (done)
 - add point to map
 
 POI
 ---
 
-- fix buttons style
+- fix buttons style (done)
 - show/hide other things close by
 - add take shot to map
 - add website link
 - add phone number
-- delete poi
+- delete poi (done)
 
 location
 --------
 
-- add dropdown to pick map
+- add dropdown to pick map (done)
 
 api
 ---
@@ -34,6 +34,7 @@ api
 - access maps (done)
 - access pois list (done)
 - access poi (done)
+- check user access
 
 Book
 ----
