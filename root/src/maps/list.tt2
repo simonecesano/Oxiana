@@ -4,8 +4,6 @@
 
 <style>
 #map { height: 640px; margin-top: 32px }
-.leaflet-control i.fa-2x { padding-top: 2px }
-    .leaflet-control i.fa-lg { padding-top: 7px }
 </style>
 <script id="nre_poi_tpl" type="text/x-handlebars-template">
   var c = ['rgb(166,206,227)','rgb(31,120,180)','rgb(178,223,138)','rgb(51,160,44)',
@@ -14,8 +12,6 @@
 </script>
 <script type="text/javascript">
     $(function(){
-	
-	var redMarker = L.OxianaMarkers.icon({ number: 20 });
 	var redMarker = L.OxianaMarkers.icon({ number: 20 });
 	var map = L.map('map').setView([ 0, 0 ], 1);
 	var oldIcon;
@@ -37,20 +33,32 @@
 		_.each(poi, function(e, i){
 		    var o = { number: i + 1, markerColor: 'darkred' };
 		    if (e.has_description == 1) { o.markerColor = 'blue' };
-		    var m = L.marker([e.lat, e.lon], { icon: L.OxianaMarkers.icon(o) })
+		    o = L.OxianaMarkers.icon(o);
+		    var m = L.OxianaMarkers.marker([e.lat, e.lon], { id: 'p' + e.id, icon: o })
 		    m.addTo(map).bindPopup("<b>" + (i+1) + "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/" + e.name + "\">" + e.name + "</a>");
 		    marker_group.push(m);
-		    markers['m' + e.id] = m;
-		    console.log('m' + e.id);
+		    e.marker = m;
+		    e.idx = i;
+		    var i = $(m._icon);
 		});
 		marker_group = new L.featureGroup(marker_group);
 		map.fitBounds(marker_group.getBounds());
-		console.log(markers);
 		var template = Handlebars.compile($("#poi_list_tpl").html());
-		$('#poi_list').html(template({ places: poi}));
+		$('#poi_list').html(template({ places: poi }));
 		$('li.poi').hover(
+		    function(e) {
+			var m = poi[this.id.replace(/m/, "")].marker.icon();
+			m.data('oldclass', m.attr('class'))
+			if (m.hasClass('awesome-marker-icon-darkred')) m.toggleClass('awesome-marker-icon-darkred')
+			if (m.hasClass('awesome-marker-icon-blue'))    m.toggleClass('awesome-marker-icon-blue')
+			m.toggleClass('awesome-marker-icon-orange').css('z-index', 1000);
+			
+		    },
+		    function(e) {
+			var m = poi[this.id.replace(/m/, "")].marker.icon();
+			m.attr('class', m.data('oldclass')).css('z-index', 900);
+		    }
 		);
-		console.log(markers);
 	    });
     })
 </script>
@@ -62,10 +70,10 @@
       <div id="map"></div>
     </div>
     <div class="col-md-12">
-      <div style="-webkit-column-count:4;-moz-column-count:4;column-count:4;">
+      <div class="multicol">
 	<script id="poi_list_tpl" type="text/x-handlebars-template">
 	  {{#each places}}
-	  <li id="m{{this.id}}" class="poi">
+	  <li id="m{{this.idx}}" class="poi">
 	    <a href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/{{this.name}}">{{this.name}}</a>{{#if this.poi_type}} <i class="fa fa-{{this.poi_type}}"></i>{{/if}}
 	  </li>
 	  {{/each}}

@@ -43,7 +43,7 @@ sub auto :Private {
     $c->log->info($c->action->private_path);
     $c->log->info($c->req->path);
     $c->log->info($c->action->reverse);
-    
+    $c->log->info($c->req->user_agent);
     unless ($c->action->private_path =~ /\/index/
 	    || $c->action->private_path =~ /\/login/) {
 	$c->log->info("would be redirected");

@@ -10,33 +10,36 @@ $(function(){
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-    L.marker(
+    var m = L.marker(
 	[[% poi.lat %], [% poi.lon %]]
-    ).addTo(map).bindPopup("[% poi.name %]");
+    );
+    m.addTo(map).bindPopup("[% poi.name %]");
+    console.log(m._icon.outerHTML);
 })
 </script>
 <style>
-#map { height: 480px; margin-top: 0px }
-.leaflet-control i.fa-2x { padding-top: 2px }
-.leaflet-control i.fa-lg { padding-top: 7px }
+  #map { height: 480px; margin-top: 0px }
+  .buttons { margin-bottom: 12pt }
 </style>
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 col-sm-6">
       <h1>[% poi.name %]</h1>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 col-sm-6">
       <div id="address">[% poi.extended_data.address.replace("\n", '<br />') %]<p /></div>
       <div id="description">[% poi.description %]</div>
       <div id="hours">[% poi.extended_data.hours.replace("\n", '<br />').replace("\t", ': ') %]</div>
-      <a class="btn btn-primary btn-sm" href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% poi.name %]/edit">edit</a>
-      <a class="btn btn-primary btn-sm" href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% poi.name %]/delete">delete</a>
-      <a class="btn btn-primary btn-sm" href="/maps/[% c.stash.user %]/[% c.stash.map.name %]">back to map</a>
+      <div class="buttons">
+	<a class="btn btn-primary btn-sm" href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% poi.name %]/edit">edit</a>
+	<a class="btn btn-primary btn-sm" href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% poi.name %]/delete">delete</a>
+	<a class="btn btn-primary btn-sm" href="/maps/[% c.stash.user %]/[% c.stash.map.name %]">back to map</a>
+      </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 col-sm-6">
       <div id="map"></div>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12 col-sm-6">
       <hr />
     </div>	
   </div>
