@@ -31,6 +31,15 @@ sub map_view :Chained('map') :PathPart('') :Args(0) {
     $c->stash->{template} = 'maps/list.tt2';
 }
 
+sub map_clone :Chained('map') :PathPart('copy') :Args(0) {
+    my ( $self, $c ) = @_;
+    # my $m = $c->model('Maps::Map')->create({ user_id => $c->user->uid, name => $c->stash->{map}->name });
+    my $m = $c->stash->{map}->copy({ user_id => $c->user->uid });
+    for ($c->model('Maps::Map')->result_source->relationships) {
+	$c->log->info($_);
+    }
+    $c->res->redirect($c->uri_for('/maps', $c->user->uid, $c->stash->{map}->name))
+}
 
 sub map_new :Chained('base') :PathPart('new') :Args(0) {
     my ($self, $c) = @_;
