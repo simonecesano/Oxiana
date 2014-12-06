@@ -7,13 +7,19 @@
     L.OxianaMarkers = {};
 
     L.OxianaMarkers.version = '0.0.1';
-
+    L.OxianaMarkers.Marker = function(){ L.Marker.apply(this, arguments) };
+    L.OxianaMarkers.Marker.prototype = Object.create(L.Marker.prototype);
+    L.OxianaMarkers.Marker.prototype.constructor = L.OxianaMarkers.Marker;
+    L.OxianaMarkers.marker = function(latlon, options) { return new L.OxianaMarkers.Marker(latlon, options); }
+    L.OxianaMarkers.Marker.prototype.icon = function() { return $(this._icon) }
+    
     L.OxianaMarkers.Icon = L.AwesomeMarkers.Icon.extend({
         _createInner: function() {
             var iconClass, iconSpinClass = "", iconColorClass = "", iconColorStyle = "", options = this.options;
 
 	    if (options.number > 0) {
-		return '<div style="font-size:12pt;color:white;font-family:Ubuntu,Tahoma,Helvetica Neue;padding-top:6px">' + options.number + '</div>';
+		return '<div id="m' + options.number +'" style="font-size:12pt;color:white;font-family:Ubuntu,Tahoma,Helvetica Neue;padding-top:6px">' +
+		    options.number + '</div>';
 	    }
 	    if (null !== options.poi_type ) {
 		return '<img style="padding-top:9px" src="' + '/static/glyphicons/glyphicons_288_scissors.png' + '">';
@@ -40,9 +46,9 @@
         },
 
     });
-        
     L.OxianaMarkers.icon = function (options) {
         return new L.OxianaMarkers.Icon(options);
     };
+
 
 }(this, document));
