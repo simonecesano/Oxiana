@@ -39,16 +39,17 @@ __PACKAGE__->config
      'default_view' => 'HTML',
      disable_component_resolution_regex_fallback => 1,
      enable_catalyst_header => 1, # Send X-Catalyst header
-     'Plugin::Static::Simple'
-     => {
-	 dirs
-	 => [
-	     '/static',
-	     qr/^(images|css)/,
-	    ],
-	 no_logs => 1,
-	 logging => 0,
-	},
+
+     # 'Plugin::Static::Simple'
+     # => {
+     # 	 dirs
+     # 	 => [
+     # 	     '/static',
+     # 	     qr/^(images|css)/,
+     # 	    ],
+     # 	 no_logs => 1,
+     # 	 logging => 0,
+     # 	},
     );
 
 # $\ = "\n";
