@@ -22,7 +22,7 @@
 		    options.number + '</div>';
 	    }
 	    if (null !== options.poi_type ) {
-		return '<img style="padding-top:9px" src="' + '/static/glyphicons/glyphicons_288_scissors.png' + '">';
+		// return '<img style="padding-top:9px" src="' + '/static/glyphicons/glyphicons_288_scissors.png' + '">';
 	    }
 
             if(options.icon.slice(0, options.prefix.length + 1) === options.prefix + "-") {
