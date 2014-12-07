@@ -22,7 +22,8 @@
 				       $('#choose_place').modal('toggle')
 				   })
 			       } else {
-				   console.log(places.places.length);
+				   $('#lat').val(d[0].lat);
+				   $('#lon').val(d[0].lon);
 			       }
 			   });
 	    }
