@@ -1,7 +1,7 @@
 general
 --------
 
-- fix current map
+- fix current map (done)
 - refactor poi controller (done)
 
 Main Map
@@ -11,7 +11,6 @@ Main Map
 - change location icon by type
 - change color for locations that do not have descriptions (done)
 - adjust size to include all points (done)
-- add point to map
 
 POI
 ---
@@ -22,6 +21,8 @@ POI
 - add website link
 - add phone number
 - delete poi (done)
+- rename poi
+- move to another map
 
 location
 --------
@@ -53,3 +54,15 @@ Printing
 - test without tables
 - add picture
 - download as tar.gz
+
+Tools
+------
+
+- add from google maps (done)
+- add from address
+- pop-up for choosing map to add to
+
+infrastructure
+--------------
+
+- migrate static files to plack
