@@ -97,14 +97,23 @@ sub poi_delete  :Chained('poi') :PathPart('delete') :Args(0) {
     $c->log->info(ref $c->stash->{poi});
     my $map = $c->stash->{map};
     try {
-	
 	$c->stash->{poi}->delete;
-	# $c->res->body("done");
 	$c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name));
     } catch {
 	$c->detach(qw/Controller::Error index/);
     }
 }
+
+sub poi_rename  :Chained('poi') :PathPart('rename') :Args(0) {
+    my ( $self, $c ) = @_;
+    $c->log->info(ref $c->stash->{poi});
+    $c->log->info('#' x 80);
+    my $map = $c->stash->{map};
+    my $poi = $c->stash->{poi};
+    $poi->update({ name => $c->req->params->{new_name} });
+    $c->res->body($c->uri_for('/maps', $map->user_id, $map->name, $poi->name, 'edit'));
+}
+
 
 
 sub foobar :Path('/foobar') {

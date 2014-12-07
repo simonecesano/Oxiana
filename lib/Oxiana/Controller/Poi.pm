@@ -22,10 +22,16 @@ sub add :Path('add') :Args(0) {
 	$c->forward('View::HTML');
     } else {
 	$c->log->info("Current map " . $c->session->{current_map});
+	$c->log->info("referer " . $c->req->referer);
+	$c->log->info("referer should be " . $c->uri_for('/location'));
  	$c->stash->{map} = $c->model('Maps::Map')->find({ id => $c->session->{current_map}});
-	$c->detach('add_by_url') if $c->req->params->{url};
+
+
+	$c->detach('add_by_url') if $c->req->params->{url} =~ /google.+maps.+place/i;
+	$c->detach('add_by_address') if $c->req->params->{sel};
+
+	# this needs to check referer
 	$c->detach('add_by_location') if $c->req->params->{name};
-	$c->detach('add_by_address') if $c->req->params->{address};
     }
 }
 
@@ -63,7 +69,7 @@ sub add_by_location :Private {
 sub add_by_address :Private {
     my ( $self, $c ) = @_;
     $c->log->info($c->req->params->{address});
-    $c->res->body('address');
+    $c->res->body('address ' . $c->req->params->{sel});
 }
 
 sub iframe :Path('iframe') {
@@ -74,8 +80,8 @@ sub iframe :Path('iframe') {
 sub _google_url_to_loc {
     shift;
     my $uri = URI->new(shift);
-    my $check = quotemeta('https://www.google.de/maps/place/');
-    return unless $uri =~ /$check/;
+
+    return unless $uri =~ /google.+maps.+place/i;
     my $iri = uri_unescape($uri->as_iri);
 
     for ($iri) { s/.+?place\///; s/@//; s/\+/ /g };
@@ -84,6 +90,8 @@ sub _google_url_to_loc {
     my $r = { name => $place, lat  => $latlon[0], lon  => $latlon[1] };
     return $r;
 }
+
+
 
 
 __PACKAGE__->meta->make_immutable;
