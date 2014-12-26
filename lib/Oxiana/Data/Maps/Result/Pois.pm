@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use base 'Oxiana::Data::Maps::Result';
-# use base 'DBIx::Class::Core';
 
 __PACKAGE__->table("pois");
 
@@ -40,6 +39,10 @@ __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->resultset_class('Oxiana::Data::Maps::ResultClass::Pois');
 
+__PACKAGE__->belongs_to('maps' => 'Oxiana::Data::Maps::Result::Map', 
+		       { 'foreign.id' => 'self.map_id' });
+
+
 sub has_description {
     my $self = shift;
     return $self->description && length($self->description) > 0 ? 1 : 0;
@@ -49,6 +52,5 @@ sub TO_JSON {
     my $self = shift;
     return { has_description => $self->has_description, %{ $self->next::method } }
 }
-
 
 1;
