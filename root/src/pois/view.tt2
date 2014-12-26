@@ -4,7 +4,7 @@
 $(function(){
     var map = L.map('map').setView([ [% poi.lat %], [% poi.lon %] ], 18);
     map.on('moveend', function() { 
-        console.log(map.getBounds().pad(5).toBBoxString());
+        // console.log(map.getBounds().pad(5).toBBoxString());
     });	 
 
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
