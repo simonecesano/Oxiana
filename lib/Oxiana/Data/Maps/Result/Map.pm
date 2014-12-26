@@ -1,24 +1,10 @@
 use utf8;
 package Oxiana::Data::Maps::Result::Map;
 
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
-
-=head1 NAME
-
-Oxiana::Data::Maps::Result::Map
-
-=cut
-
 use strict;
 use warnings;
 
-# use base 'DBIx::Class::Core';
 use base 'Oxiana::Data::Maps::Result';
-
-=head1 TABLE: C<maps>
-
-=cut
 
 __PACKAGE__->table("maps");
 
@@ -42,16 +28,7 @@ __PACKAGE__->add_columns
      { data_type => "float", is_nullable => 1 },
 );
 
-=head1 PRIMARY KEY
-
-=over 4
-
-=item * L</id>
-
-=back
-
-=cut
-
+__PACKAGE__->resultset_class('Oxiana::Data::Maps::ResultClass::Map');
 
 __PACKAGE__->set_primary_key("id");
 
