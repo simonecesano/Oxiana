@@ -6,7 +6,6 @@ use strict;
 use warnings;
 no warnings qw/uninitialized/;
 
-
 use JSON;
 
 sub as_json {
@@ -20,6 +19,11 @@ sub as_json {
 
 sub foo {
     return 'hallo'
+}
+
+sub writeable_by {
+    my $self = shift;
+    return $self->search(@_)
 }
 
 1
