@@ -25,7 +25,7 @@
     	$('#rename_final').click(
 	    function(){
 		$.post(
-		    "/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% poi.name %]/rename",
+		    "/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name %]/rename",
 		    { new_name: $('#new_name').val(), new_map: $('#new_map').val(), id: $('#id').val(), map_id: $('#map_id').val() },
 		    function(d) { window.location.href = d }
 		);
