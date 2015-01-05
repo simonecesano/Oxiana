@@ -38,12 +38,15 @@ sub add :Path('add') :Args(0) {
 sub add_by_url :Private {
     my ( $self, $c ) = @_;
     my $poi = $self->_google_url_to_loc($c->req->params->{url});
+    $poi->{name} = substr($poi->{name}, 0, 64); # this sucks
+
     $c->detach(qw/Controller::Error index/) unless ($poi->{name} && defined $poi->{lat} && defined $poi->{lon});
 
     $c->log->info(dump $poi);
     my $map = $c->stash->{map};
-    if (my $new_poi = $c->stash->{poi} = $c->stash->{map}->related_resultset('pois')->create) {
-	$poi->{name} = substr($poi->{name}, 0, 64); # this sucks
+    $c->log->info(ref $map);
+    $c->log->info(ref $c->stash->{map}->related_resultset('pois'));
+    if (my $new_poi = $c->stash->{poi} = $c->stash->{map}->related_resultset('pois')->create($poi)) {
 	$new_poi->update($poi);
 	$c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name, $poi->{name}, 'edit'));
     } else {
