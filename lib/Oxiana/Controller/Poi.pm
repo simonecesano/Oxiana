@@ -48,7 +48,7 @@ sub add_by_url :Private {
     $c->log->info(ref $c->stash->{map}->related_resultset('pois'));
     if (my $new_poi = $c->stash->{poi} = $c->stash->{map}->related_resultset('pois')->create($poi)) {
 	$new_poi->update($poi);
-	$c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name, $poi->{name}, 'edit'));
+	$c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name, $poi->{id}, $poi->{name}, 'edit'));
     } else {
     	$c->detach(qw/Controller::Error index/);
     }
@@ -62,7 +62,7 @@ sub add_by_location :Private {
 	my $poi = {}; @{$poi}{qw/name lat lon/} = @{$q}{qw/name lat lon/};
 	if ($c->stash->{poi} = $map->related_resultset('pois')->create($poi)) {
 	    # XXXX this is messy, and it should be refactored with add_by_url
-	    $c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name, $poi->{name}, 'edit'));
+	    $c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name, $poi->{id}, $poi->{name}, 'edit'));
 	} else {
 	    $c->detach(qw/Controller::Error index/);
 	}
