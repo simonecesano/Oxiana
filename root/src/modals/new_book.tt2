@@ -1,0 +1,40 @@
+<script>
+    $(function(){
+	// $('#create_book').click(function(){})
+	$('#create_book, #create_cancel').click(function(){ $('#create_book_modal').modal('toggle') });
+    	$('#create_final').click(
+	    function(){
+		$.post(
+		    "/books/new",
+		    { name: $('#create_book_modal #name').val() },
+		    function(d) { window.location.href = d }
+		);
+		$('#create_book_modal').modal('toggle');
+	    }
+	);
+    })
+</script>
+<div id="create_book_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Create a book</h4>
+      </div>
+      <div class="modal-body">
+	<form role="form">
+	  <div class="form-group">
+	    <label for="name">name:</label>
+            <input name="name" type="text" class="form-control"
+		   id="name"
+		   placeholder="The name of your new book goes here">
+	  </div>
+	</form>
+      </div>
+      <div class="modal-footer">
+	<a class="btn btn-primary" id="create_final">save</a>
+	<a class="btn btn-primary" id="create_cancel">cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
