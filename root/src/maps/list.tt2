@@ -40,7 +40,9 @@
 		    o = L.OxianaMarkers.icon(o);
 		    var m = L.OxianaMarkers.marker([e.lat, e.lon], { id: 'p' + e.id, icon: o })
 		    // console.log(m.toGeoJSON())
-		    m.addTo(map).bindPopup("<b>" + (i+1) + "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/" + e.name + "\">" + e.name + "</a>");
+		    m.addTo(map).bindPopup("<b>" + (i+1) +
+					   "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/"
+					   + [ e.id, e.name ].join('/') + "\">" + e.name + "</a>");
 		    
 		    marker_group.push(m);
 		    var v = m.toGeoJSON();
