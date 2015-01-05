@@ -42,7 +42,8 @@ sub add_by_url :Private {
 
     $c->log->info(dump $poi);
     my $map = $c->stash->{map};
-    if ($c->stash->{poi} = $c->stash->{map}->related_resultset('pois')->create($poi)) {
+    if (my $new_poi = $c->stash->{poi} = $c->stash->{map}->related_resultset('pois')->create) {
+	$new_poi->update($poi);
 	$c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name, $poi->{name}, 'edit'));
     } else {
     	$c->detach(qw/Controller::Error index/);
