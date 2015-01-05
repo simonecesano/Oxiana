@@ -43,6 +43,7 @@ sub add_by_url :Private {
     $c->log->info(dump $poi);
     my $map = $c->stash->{map};
     if (my $new_poi = $c->stash->{poi} = $c->stash->{map}->related_resultset('pois')->create) {
+	$poi->{name} = substr($poi->{name}, 0, 64); # this sucks
 	$new_poi->update($poi);
 	$c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name, $poi->{name}, 'edit'));
     } else {
