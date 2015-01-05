@@ -104,7 +104,7 @@
       <div class="col-md-12">
 	<input type="submit" style="margin:6px" type="button" class="btn btn-primary" value="save"><a class="btn btn-primary" href=".">view</a>
 	<a class="btn btn-primary" id="rename_btn">rename</a>
-	<a class="btn btn-primary" href="..">go to map</a>
+	<a class="btn btn-primary" href="../..">go to map</a>
       </div>
     </form>
   </div>
