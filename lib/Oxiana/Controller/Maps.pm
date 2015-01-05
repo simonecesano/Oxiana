@@ -108,7 +108,7 @@ sub poi_rename  :Chained('poi') :PathPart('rename') :Args(0) {
     my $map = $c->stash->{map};
     my $poi = $c->stash->{poi};
     if ($c->req->params->{new_name}) { $poi->update({ name => $c->req->params->{new_name} }) }
-    $c->res->body($c->uri_for('/maps', $map->user_id, $map->name, $poi->name, 'edit'));
+    $c->res->body($c->uri_for('/maps', $map->user_id, $map->name, $poi->id, $poi->name, 'edit'));
 }
 
 __PACKAGE__->meta->make_immutable;
