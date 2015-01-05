@@ -1,0 +1,79 @@
+<script>
+    $(function(){
+	$('#add_pois, #add_cancel').click(function(){
+	    if ($('#new_chapter').is(':checked')) {
+		$('#chapter_select').hide().prev().hide();
+		$('#chapter_name').show().prev().show();
+	    } else {
+		$('#chapter_select').show().prev().show();
+		$('#chapter_name').hide().prev().hide();
+	    }
+	    $('#add_pois_modal').modal('toggle')
+	});
+	$('#new_chapter').click(function(){
+	    $('#chapter_name, #chapter_select').toggle().prev().toggle();
+	});
+    	$('#add_final').click(
+	    function(){
+    		var map_bounds = map.getBounds();
+		$.post(
+		    "/books/pois/add",
+		    {
+			chapter: $('#new_chapter').is(':checked') ? $('#add_pois_modal #chapter_name').val() : $('#add_pois_modal #chapter_select').val(),
+			pois: JSON.stringify(
+			    { pois:
+			      _.filter(poi_list, function(e) {
+				  var l = L.latLng(e.geometry.coordinates[1], e.geometry.coordinates[0]);
+				  return map_bounds.contains(l)
+			      })
+			    })
+		    },
+		    function(d) {
+			//window.location.href = d
+			console.log(d);
+		    }
+		);
+		$('#add_pois_modal').modal('toggle');
+	    }
+	);
+    })
+</script>
+<div id="add_pois_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Add POIs</h4>
+      </div>
+      <div class="modal-body">
+	<form role="form" class="form-horizontal">
+	  <div class="form-group">
+            <label for="book">Book:</label>
+	    <select class="form-control" data-style="btn-inverse" name="book" id="book">
+	      <option value="">select a book</option>
+	      [% FOR m = c.model('Maps::Book').search({ 'user_id' => c.user.uid }) %]
+	      <option value="[% m.id %]">[% m.name %]</option>
+	      [% END %]
+	    </select>
+	    <label for="chapter_select">Chapter:</label>
+	    <select class="form-control" data-style="btn-inverse" name="chapter_select" id="chapter_select">
+	      <option value="">select a chapter</option>
+	      [% FOR m = c.model('Maps::Book').search({ 'user_id' => c.user.uid }) %]
+	      <option value="[% m.id %]">[% m.name %]</option>
+	      [% END %]
+	    </select>
+	    <label for="chapter_name">Chapter:</label>
+	    <input style="width:5em" class="form-control" name="chapter_name" id="chapter_name" type="text"> 
+	    <div class="checkbox"><label>
+		<input id="new_chapter" name="new_chapter" checked="false" type="checkbox">&nbsp;new chapter</label>
+	    </div>
+	  </div>
+	</form>
+      </div>
+      <div class="modal-footer">
+	<a class="btn btn-primary" id="add_final">add</a>
+	<a class="btn btn-primary" id="add_cancel">cancel</a>
+      </div>
+    </div>
+  </div>
+</div>
