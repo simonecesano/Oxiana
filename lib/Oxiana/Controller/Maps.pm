@@ -56,9 +56,9 @@ sub map_new :Chained('base') :PathPart('new') :Args(0) {
     }
 }
 
-sub poi :Chained('map') :PathPart('') :CaptureArgs(1) {
-    my ( $self, $c, $poi ) = @_;
-    $c->stash->{poi} = $c->stash->{map}->find_related('pois', { name => $poi })
+sub poi :Chained('map') :PathPart('') :CaptureArgs(2) {
+    my ( $self, $c, $poi_id, $poi_name ) = @_;
+    $c->stash->{poi} = $c->stash->{map}->find_related('pois', { id => $poi_id })
 	|| $c->detach(qw/Controller::Error index/);
 }
 
@@ -66,9 +66,6 @@ sub poi_view :Chained('poi') :PathPart('') :Args(0) {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'pois/view.tt2';
 }
-
-
-
 
 sub poi_edit :Chained('poi') :PathPart('edit') :Args(0) {
     my ( $self, $c ) = @_;
@@ -110,26 +107,10 @@ sub poi_rename  :Chained('poi') :PathPart('rename') :Args(0) {
     $c->log->info('#' x 80);
     my $map = $c->stash->{map};
     my $poi = $c->stash->{poi};
-    $poi->update({ name => $c->req->params->{new_name} });
+    if ($c->req->params->{new_name}) { $poi->update({ name => $c->req->params->{new_name} }) }
     $c->res->body($c->uri_for('/maps', $map->user_id, $map->name, $poi->name, 'edit'));
 }
-
-
-
-sub foobar :Path('/foobar') {
-    my ($self, $c) = @_;
-
-    $c->stash->{r} = [qw/vicenza amsterdam erlangen treviso venezia berlin/];
-    $c->forward('View::JSON');
-
-}
-
 
 __PACKAGE__->meta->make_immutable;
 
 1;
-
-
-__DATA__
-
-http://nominatim.openstreetmap.org/search?q=amsterdam&format=json
