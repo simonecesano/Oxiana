@@ -20,6 +20,7 @@ sub add :Path('add') :Args(0) {
     unless ($c->user) {
 	$c->log->info("Uri for action with params: " . $c->uri_for($c->action, $c->req->query_params));
 	$c->log->info("Referer: " . $c->req->uri);
+	# this is the way to redirect with Heroku
 	$c->session->{login_referer} = $c->uri_for($c->action, $c->req->query_params);
 	$c->res->redirect($c->uri_for("/login"));
 	$c->detach;
