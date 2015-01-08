@@ -18,7 +18,7 @@ sub add :Path('add') :Args(0) {
     my ( $self, $c ) = @_;
 
     unless ($c->user) {
-	$c->log->info("Uri for action: " . $c->uri_for($c->action));
+	$c->log->info("Uri for action with params: " . $c->uri_for($c->action, $c->req->query_params));
 	$c->log->info("Referer: " . $c->req->uri);
 	$c->session->{login_referer} = $c->req->uri;
 	$c->res->redirect($c->uri_for("/login"));
