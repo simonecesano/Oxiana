@@ -36,24 +36,27 @@ sub index :Path :Args(0) {
 }
 
 use Try::Tiny;
+use Data::Dump qw/dump/;
 sub auto :Private {
     my ( $self, $c ) = @_;
     $c->log->info(('-' x 40) . " user " . ('-' x 40));
 
-    $c->log->info($c->action->private_path);
-    $c->log->info($c->req->path);
-    $c->log->info($c->action->reverse);
-    $c->log->info($c->req->user_agent);
+    $c->log->info(sprintf "Private path: %s\n", $c->action->private_path);
+    $c->log->info(sprintf "Path: %s\n", $c->req->path);
+    $c->log->info(sprintf "Reverse path: %s\n", $c->action->reverse);
+    $c->log->info(sprintf "User agent: %s\n", $c->req->user_agent);
+    $c->log->info(sprintf "Attributes:\n%s\n", dump $c->action->attributes);
+    
     unless ($c->action->private_path =~ /\/index/
 	    || $c->action->private_path =~ /\/login/) {
-	$c->log->info("would be redirected");
+	$c->log->info("This action would be redirected");
     } else {
-	$c->log->info("would not be redirected");
+	$c->log->info("This action would not be redirected");
     }
     try {
-	$c->log->info($c->user->uid);
+	$c->log->info("The user is " . $c->user->uid);
     } catch {
-	$c->log->info("not logged in");
+	$c->log->info("The user is not logged in");
     }
 }
 
