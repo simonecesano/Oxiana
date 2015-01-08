@@ -9,7 +9,7 @@
       [% u = c.log.info("user id: " _ c.stash.uid) %]
       [% IF c.model('Maps::Map').search({ 'user_id' => c.stash.uid }) %]
       [% FOR m = c.model('Maps::Map').search({ 'user_id' => c.stash.uid }) %]
-      <a href="[% c.uri_for('/maps', c.stash.uid, m.name) %]">[% m.name %]</a><br />
+      <a href="[% c.uri_for('/maps', m.id, m.name) %]">[% m.name %]</a><br />
       [% END %]<hr />
       <a href="[% c.uri_for('/maps/new') %]">Create a new map</a><br />
       <a href="[% c.uri_for('/import/google') %]">Import from Google maps</a><br />
