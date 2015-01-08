@@ -32,7 +32,7 @@ __PACKAGE__->resultset_class('Oxiana::Data::Maps::ResultClass::Map');
 
 __PACKAGE__->set_primary_key("id");
 
-__PACKAGE__->has_many('pois' => 'Oxiana::Data::Maps::Result::Pois', 
+__PACKAGE__->has_many('pois' => 'Oxiana::Data::Maps::Result::Poi', 
 		       { 'foreign.map_id' => 'self.id' });
 
 sub has_rights {
@@ -45,6 +45,7 @@ sub has_rights {
     $uid = quotemeta($uid);
     return $self->can_read =~ /$uid/;
 }
+
 sub is_readable_by {
     my ($self, $user) = @_;
     return $self->has_rights($user, 'can_read');
