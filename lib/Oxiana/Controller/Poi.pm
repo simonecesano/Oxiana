@@ -17,6 +17,14 @@ sub index :Path :Args(0) {
 sub add :Path('add') :Args(0) {
     my ( $self, $c ) = @_;
 
+    unless ($c->user) {
+	$c->log->info($c->uri_for($c->action));
+	$c->session->{login_referer} = $c->req->uri;
+	$c->log->info(dump $c->action->attributes);
+	$c->res->redirect($c->uri_for("/login"));
+	$c->detach;
+    }
+
     unless (keys %{$c->req->params}) {
 	$c->stash->{template} = 'pois/add.tt2';
 	$c->forward('View::HTML');
@@ -37,6 +45,8 @@ sub add :Path('add') :Args(0) {
 
 sub add_by_url :Private {
     my ( $self, $c ) = @_;
+
+    
     my $poi = $self->_google_url_to_loc($c->req->params->{url});
     $poi->{name} = substr($poi->{name}, 0, 64); # this sucks
 
@@ -48,7 +58,7 @@ sub add_by_url :Private {
     $c->log->info(ref $c->stash->{map}->related_resultset('pois'));
     if (my $new_poi = $c->stash->{poi} = $c->stash->{map}->related_resultset('pois')->create($poi)) {
 	$new_poi->update($poi);
-	$c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name, $new_poi->id, $new_poi->name, 'edit'));
+	$c->res->redirect($c->uri_for('/maps', $map->id, $map->name, $new_poi->id, $new_poi->name, 'edit'));
     } else {
     	$c->detach(qw/Controller::Error index/);
     }
@@ -62,7 +72,7 @@ sub add_by_location :Private {
 	my $poi = {}; @{$poi}{qw/name lat lon/} = @{$q}{qw/name lat lon/};
 	if (my $new_poi = $c->stash->{poi} = $map->related_resultset('pois')->create($poi)) {
 	    # XXXX this is messy, and it should be refactored with add_by_url
-	$c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name, $new_poi->id, $new_poi->name, 'edit'));
+	$c->res->redirect($c->uri_for('/maps', $map->id, $map->name, $new_poi->id, $new_poi->name, 'edit'));
 	} else {
 	    $c->detach(qw/Controller::Error index/);
 	}
