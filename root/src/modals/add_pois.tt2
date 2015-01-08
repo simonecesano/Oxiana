@@ -19,7 +19,11 @@
 		$.post(
 		    "/books/pois/add",
 		    {
-			chapter: $('#new_chapter').is(':checked') ? $('#add_pois_modal #chapter_name').val() : $('#add_pois_modal #chapter_select').val(),
+			new_chapter: $('#add_pois_modal #new_chapter').is(':checked'),
+			map_id: map_id,
+			chapter_name: $('#add_pois_modal #chapter_name').val(),
+			chapter_id: $('#add_pois_modal #chapter_select').val(),
+			book_id: $('#add_pois_modal #book_id').val(),
 			pois: JSON.stringify(
 			    { pois:
 			      _.filter(poi_list, function(e) {
@@ -49,21 +53,21 @@
 	<form role="form" class="form-horizontal">
 	  <div class="form-group">
             <label for="book">Book:</label>
-	    <select class="form-control" data-style="btn-inverse" name="book" id="book">
+	    <select class="form-control" data-style="btn-inverse" name="book_id" id="book_id">
 	      <option value="">select a book</option>
-	      [% FOR m = c.model('Maps::Book').search({ 'user_id' => c.user.uid }) %]
+	      [% FOR m = c.model('Maps::Book').search_rs({ 'user_id' => c.user.uid }).all %]
 	      <option value="[% m.id %]">[% m.name %]</option>
 	      [% END %]
 	    </select>
 	    <label for="chapter_select">Chapter:</label>
 	    <select class="form-control" data-style="btn-inverse" name="chapter_select" id="chapter_select">
 	      <option value="">select a chapter</option>
-	      [% FOR m = c.model('Maps::Book').search({ 'user_id' => c.user.uid }) %]
+	      [% FOR m = c.model('Maps::Chapter').search_rs({ }).all %]
 	      <option value="[% m.id %]">[% m.name %]</option>
 	      [% END %]
 	    </select>
 	    <label for="chapter_name">Chapter:</label>
-	    <input style="width:5em" class="form-control" name="chapter_name" id="chapter_name" type="text"> 
+	    <input class="form-control" style="width=100%" name="chapter_name" id="chapter_name" type="text"> 
 	    <div class="checkbox"><label>
 		<input id="new_chapter" name="new_chapter" checked="false" type="checkbox">&nbsp;new chapter</label>
 	    </div>
