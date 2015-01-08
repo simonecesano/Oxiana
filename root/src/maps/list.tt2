@@ -15,6 +15,7 @@
     var marker_group = [];
     var poi_list = [];
     var map;
+    var map_id = [% c.stash.map.id %];
     $(function(){
 	var redMarker = L.OxianaMarkers.icon({ number: 20 });
 	map = L.map('map').setView([ 0, 0 ], 1);
@@ -30,7 +31,7 @@
 	var markers = {};
 	$.getJSON(
 	    "[% c.uri_for('/api/maps/poi') %]",
-	    { 'map_id': 	[% c.stash.map.id %] },
+	    { 'map_id': [% c.stash.map.id %] },
 	    function(poi) {
 		// poi_list = JSON.parse(JSON.stringify(poi));
 		poi = _.sortBy(poi, function(e){ return e.name });
@@ -41,7 +42,7 @@
 		    var m = L.OxianaMarkers.marker([e.lat, e.lon], { id: 'p' + e.id, icon: o })
 		    // console.log(m.toGeoJSON())
 		    m.addTo(map).bindPopup("<b>" + (i+1) +
-					   "</b> | <a href=\"/maps/[% c.stash.user %]/[% c.stash.map.name %]/"
+					   "</b> | <a href=\"/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/"
 					   + [ e.id, e.name ].join('/') + "\">" + e.name + "</a>");
 		    
 		    marker_group.push(m);
@@ -85,7 +86,7 @@
 	<script id="poi_list_tpl" type="text/x-handlebars-template">
 	  {{#each places}}
 	  <li id="m{{this.idx}}" class="poi">
-	    <a href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/{{this.id}}/{{this.name}}"
+	    <a href="/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/{{this.id}}/{{this.name}}"
 	       >{{this.name}}</a>{{#if this.poi_type}} <i class="fa fa-{{this.poi_type}}"></i>{{/if}}
 	  </li>
 	  {{/each}}
@@ -96,5 +97,3 @@
     </div>
   </div>
 </div>
-[% PROCESS 'modals/new_book.tt2' %]
-[% PROCESS 'modals/add_pois.tt2' %]
