@@ -49,22 +49,24 @@ sub google :Path('google') :Args(0) {
 	$c->stash->{map} = $c->req->params->{map};
 	$c->forward('get_google_data');
 	$c->forward('load_google_data');
-	$c->res->redirect($c->uri_for("/maps", $c->user->{id}, $map));
+	$c->res->body($c->uri_for("/maps", $c->user->{id}, $map));
     }
 }
 
 sub kml :Path('kml') :Args(0) {
     my ( $self, $c ) = @_;
-    my $user = $c->user->{id} || $c->detach(qw/Controller::Error index/);
+    my $user = $c->user || $c->res->redirect($c->uri_for("/login"));
     my ($kml, $name);
     if (keys %{$c->req->params}) {
 	if ($c->req->params->{file}) { $kml = $c->req->upload('file')->slurp } else { $c->detach(qw/Controller::Error index/) };
 	my $xml = XML::XPath->new( xml => $kml ) || $c->detach(qw/Controller::Error index/);
 	my ($name) = map { XMLin($_->toString) } $xml->find('//Document/name')->get_nodelist;
-	$c->stash->{map} ||= $name; $name = $c->stash->{map};
-	$c->flash->{kml} = [ map { XMLin($_->toString) } ( $xml->find('//Placemark/Point/..')->get_nodelist) ];
+	$c->log->info($name);
+	$c->stash->{map_name} = $name;
+	$c->stash->{kml} = [ map { XMLin($_->toString) } ( $xml->find('//Placemark/Point/..')->get_nodelist) ];
 	$c->forward('load_google_data');
-	if ($c->req->params->{file}) { $c->res->body("/maps/$user/$name") } 
+	# $c->res->redirect($c->uri_for('/maps', $c->stash->{map}->id, $c->stash->{map}->name));
+	$c->res->body($c->uri_for('/maps', $c->stash->{map}->id, $c->stash->{map}->name)); 
     }
 }
 
@@ -78,7 +80,7 @@ sub get_google_data :Private {
 	$kml = $kml->{content};
 	my $url = $c->stash->{url};
 	$c->log->info("KML: \n" . $kml);
-	$c->flash->{kml} = [ map { XMLin($_->toString) } ( XML::XPath->new( xml => $kml )->find('//Placemark/Point/..')->get_nodelist) ];
+	$c->stash->{kml} = [ map { XMLin($_->toString) } ( XML::XPath->new( xml => $kml )->find('//Placemark/Point/..')->get_nodelist) ];
     } else {
 	$c->log->info("Status: " . $kml->{status});
 	$c->log->info("Reason: " . $kml->{reason});
@@ -90,15 +92,17 @@ use Try::Tiny;
 
 sub load_google_data :Private {
     my ( $self, $c ) = @_;
-    my $m = $c->model('Maps::Map')->create({ user_id => $c->user->{id}, name => $c->stash->{map}});
+    my $m = $c->model('Maps::Map')->create({ user_id => $c->user->uid, name => $c->stash->{map_name}});
     $m->insert;
-    for (@{$c->flash->{kml}}) {
+    for (@{$c->stash->{kml}}) {
 	my $i;
 	($i->{lon}, $i->{lat}) = split ',', $_->{Point}->{coordinates};
 	$c->log->info($_->{name});
-	$i->{name} = $_->{name}; $i->{name} =~ s/\s+$//;
-	try { my $e = $m->create_related('pois', $i); $e->insert } catch { $c->log->info(dump $_) };
+	$i->{name} = $_->{name}; $i->{name} =~ s/^\s+|\s+$//g;
+	try { my $e = $m->create_related('pois', $i); $e->insert }
+	    catch { $c->log->info("Error in loading data:\n" . dump $_) };
     }
+    $c->stash->{map} = $m;
     return 1;
 }
 
