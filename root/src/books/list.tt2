@@ -1,0 +1,16 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/jquery/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/jquery/jquery-ui.structure.css">
+<script src="[% c.uri_for('/static') %]/jquery/jquery-ui.js"></script>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Your books</h1>
+    </div>
+    <div class="col-md-12">
+      [% FOR b = c.stash.books.all %]
+      <p><a href="[% c.uri_for('/books', c.user.uid, b.id, b.name) %]">[% b.name %]</a></p>
+      [% END %]
+    </div>
+  </div>
+</div>
