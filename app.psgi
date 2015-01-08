@@ -10,7 +10,9 @@ use Oxiana;
 my $app = Oxiana->apply_default_middlewares(Oxiana->psgi_app);
 
 builder {
-    mount "/" => builder { $app };
+    enable 'CrossOrigin', origins => '*';
+    mount "/favicon.ico" => Plack::App::File->new(file => './root/favicon.ico')->to_app;
     mount "/static" => builder { Plack::App::File->new(root => "./root/static")->to_app };
+    mount "/" => builder { $app };
 }
 
