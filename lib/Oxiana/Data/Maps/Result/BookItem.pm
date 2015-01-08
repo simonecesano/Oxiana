@@ -31,7 +31,7 @@ __PACKAGE__->add_columns
      "chapter_id",
      { data_type => "integer", is_nullable => 0 },
      "poi_id",
-     { data_type => "integer", is_nullable => 0 },
+     { data_type => "integer", is_nullable => 1 },
      "item_sequence",
      { data_type => "integer", is_nullable => 1, accessor => 'sequence' },
      "item_type", # latex, html, markdown, image in base64, PDF
