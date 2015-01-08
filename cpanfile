@@ -25,7 +25,6 @@ requires "Catalyst::Plugin::Authentication";
 requires "Catalyst::Plugin::Session";
 requires "Catalyst::Plugin::Session::Store::FastMmap";
 requires "Catalyst::Plugin::Session::State::Cookie";
-
 requires "Catalyst::Model::DBIC::Schema";
 requires "DBD::Pg";
 
@@ -51,3 +50,4 @@ requires 'Net::OAuth2::Profile::WebServer';
 requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'DateTime';
 requires 'LWP::Protocol::https';
+requires "Plack::Middleware::CrossOrigin";
