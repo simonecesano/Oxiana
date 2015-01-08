@@ -25,7 +25,7 @@
     	$('#rename_final').click(
 	    function(){
 		$.post(
-		    "/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name %]/rename",
+		    "/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name %]/rename",
 		    { new_name: $('#new_name').val(), new_map: $('#new_map').val(), id: $('#id').val(), map_id: $('#map_id').val() },
 		    function(d) { window.location.href = d }
 		);
@@ -104,7 +104,8 @@
       <div class="col-md-12">
 	<input type="submit" style="margin:6px" type="button" class="btn btn-primary" value="save"><a class="btn btn-primary" href=".">view</a>
 	<a class="btn btn-primary" id="rename_btn">rename</a>
-	<a class="btn btn-primary" href="../..">go to map</a>
+	<a class="btn btn-primary" href="/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name %]/delete">delete</a>
+	<a class="btn btn-primary" href="/maps/[% poi.map.id %]/[% poi.map.name %]">go to map</a>
       </div>
     </form>
   </div>
