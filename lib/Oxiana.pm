@@ -21,7 +21,6 @@ $|++;
 use Catalyst qw/
     -Debug
     ConfigLoader
-    Static::Simple
     Authentication
     Session
     Session Session::Store::FastMmap
