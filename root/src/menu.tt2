@@ -1,4 +1,4 @@
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div id="menu" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -16,12 +16,29 @@
           <ul class="dropdown-menu" aria-labelledby="themes">
             <li><a href="[% c.uri_for('/home') %]">View your maps</a></li>
 	    <li><a href="[% c.uri_for('/maps/new') %]">Create a new map</a></li>
+	    <li><a href="[% c.uri_for('/import/kml') %]">Import KML data</a></li>
 	    <li role="presentation" class="divider"></li>
             <li><a href="[% c.uri_for('/search') %]">Search for maps</a></li>
 	  </ul>
 	</li>
-        <li>
-	  <a href="[% c.uri_for('/location') %]">Location</a>
+        <li class="dropdown">
+	  <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Books<span class="caret"></span></a>
+	  <ul class="dropdown-menu" aria-labelledby="themes">
+	    <li><a href="[% c.uri_for('/books', c.user.uid) %]">View your books</a></li>
+	    <li><a id="create_book" href="#">Create a new book</a></li>
+	    <li role="presentation" class="divider"></li>
+	    <li><a id="add_pois" href="#">Add points to a book</a></li>
+	  </ul>
+	</li>
+        <li class="dropdown">
+	  <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Location<span class="caret"></span></a>
+	  <ul class="dropdown-menu" aria-labelledby="themes">
+	    <li><a href="[% c.uri_for('/location') %]">Edit this point</a></li>
+	    <li role="presentation" class="divider"></li>
+	    <li><a href="[% c.uri_for('/location') %]">Add your location to a map</a></li>
+	    <li role="presentation" class="divider"></li>
+	    <li><a href="[% c.uri_for('/location') %]">Add this point to a book</a></li>
+	  </ul>
 	</li>
 	<li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Help<span class="caret"></span></a>
@@ -48,3 +65,5 @@
     [% END %]
   </div>
 </div>
+[% PROCESS 'modals/new_book.tt2' %]
+[% PROCESS 'modals/add_pois.tt2' %]
