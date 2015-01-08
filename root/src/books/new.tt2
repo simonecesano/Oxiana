@@ -1,0 +1,79 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/jquery/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/jquery/jquery-ui.structure.css">
+<script src="[% c.uri_for('/static') %]/jquery/jquery-ui.js"></script>
+<script>
+    $(function(){
+	var places;
+    })
+</script>
+<style>
+  .control-group { padding-top: 6px; padding-bottom: 6pt }
+</style>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <h2>create a new book</h2>
+    </div>
+    <form method="post">
+      <div class="col-md-4 col-md-offset-2">
+	<div class="control-group">
+          <label for="name">name:</label>
+          <input name="name" type="text" class="form-control"
+		 id="name"
+		 placeholder="The name of your new book goes here">
+	</div>
+      </div>
+            <div class="col-md-4">
+	<div class="control-group">
+          <label for="location">location:</label>
+          <input name="location" type="text" class="form-control"
+		 id="location"
+		 placeholder="The city, region or country your book is about">
+        </div>
+      </div>
+      <div class="col-md-6  col-md-offset-2">
+	<div class="control-group">
+          <label for="edit">editing:</label>
+          <input name="edit" type="text" class="form-control"
+		 id="edit"
+		 placeholder="enter the email of who is allowed to edit this book">
+        </div>
+      </div>
+      <div class="col-md-2">
+	<div class="control-group">
+	  <label class="control-label" for="public">This book is private</label>
+	  <div class="controls">
+	    <label class="radio-inline" for="public-0"><input name="public" id="public-0" value="yes" checked="checked" type="radio">yes</label>
+	    <label class="radio-inline" for="public-1"><input name="public" id="public-1" value="no" type="radio">No</label>
+	  </div>
+	</div>
+      </div>
+      <div class="col-md-8 col-md-offset-2">
+	<div class="control-group">
+	  <label class="control-label" for="save"></label>
+	  <div class="controls">
+	    <button id="save" name="save" class="btn btn-success">create book</button>
+	    <button id="cancel" name="cancel" class="btn btn-warning">cancel</button>
+	  </div>
+	</div>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="choose_place" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Did you mean...</h4>
+      </div>
+      <div class="modal-body">
+	<p>the place you chose could be one of these:</p>
+      </div>
+      <div class="modal-footer">
+	click on the correct one, please
+      </div>
+    </div>
+  </div>
+</div>
