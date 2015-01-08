@@ -31,9 +31,8 @@ $(function(){
       <div id="description">[% poi.description %]</div>
       <div id="hours">[% poi.extended_data.hours.replace("\n", '<br />').replace("\t", ': ') %]</div>
       <div class="buttons">
-	<a class="btn btn-primary btn-sm" href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name %]/edit">edit</a>
-	<a class="btn btn-primary btn-sm" href="/maps/[% c.stash.user %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name %]/delete">delete</a>
-	<a class="btn btn-primary btn-sm" href="/maps/[% c.stash.user %]/[% c.stash.map.name %]">back to map</a>
+	<a class="btn btn-primary btn-sm" href="/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name %]/edit">edit</a>
+	<a class="btn btn-primary btn-sm" href="/maps/[% c.stash.map.id %]/[% c.stash.map.name %]">back to map</a>
       </div>
     </div>
     <div class="col-md-6 col-sm-6">
