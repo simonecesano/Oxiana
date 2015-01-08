@@ -24,8 +24,8 @@ $(function() {
         <div class="form-group">
 	  <label for="url">KML URL</label>
           <input type="text" placeholder="Paste your KML URL here" name="url" class="form-control">
-	  <label for="map">Map name</label>
-          <input type="text" placeholder="Type your map name here" name="map" class="form-control">
+	  <label for="name">Map name</label>
+          <input type="text" placeholder="Type your map name here" name="name" class="form-control">
         </div>
         <input type="submit" value="Import data" class="btn btn-success">
       </form>
