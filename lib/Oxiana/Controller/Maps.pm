@@ -16,11 +16,11 @@ sub user :Chained('base') :PathPart('') :Args(1) {
 }
 
 sub map :Chained('base') :PathPart('') :CaptureArgs(2) {
-    my ( $self, $c, $user, $map ) = @_;
-    $c->stash->{map} = $c->model('Maps::Map')->find({ user_id => $user, name => $map});
+    my ( $self, $c, $map_id, $map ) = @_;
+    $c->stash->{map} = $c->model('Maps::Map')->find({ id => $map_id});
     if ($c->stash->{map}) { 
 	$c->session->{current_map} = $c->stash->{map}->id;
-	$c->stash->{user} = $user;
+	# $c->stash->{user} = $user;
     } else {
     	$c->detach(qw/Controller::Error index/);
     }
@@ -38,7 +38,7 @@ sub map_clone :Chained('map') :PathPart('copy') :Args(0) {
     for ($c->model('Maps::Map')->result_source->relationships) {
 	$c->log->info($_);
     }
-    $c->res->redirect($c->uri_for('/maps', $c->user->uid, $c->stash->{map}->name))
+    $c->res->redirect($c->uri_for('/maps', $c->stash->{map}->name))
 }
 
 sub map_new :Chained('base') :PathPart('new') :Args(0) {
@@ -49,7 +49,7 @@ sub map_new :Chained('base') :PathPart('new') :Args(0) {
 	    $m->center_lat($c->req->params->{lat});
 	    $m->center_lon($c->req->params->{lon});
 	    $m->update;
-	    $c->res->redirect($c->uri_for('/maps', $c->user->uid, $c->req->params->{name}))
+	    $c->res->redirect($c->uri_for('/maps', $m->id, $m->name))
 	} else {
 	    $c->detach(qw/Controller::Error index/);
 	}
@@ -95,7 +95,7 @@ sub poi_delete  :Chained('poi') :PathPart('delete') :Args(0) {
     my $map = $c->stash->{map};
     try {
 	$c->stash->{poi}->delete;
-	$c->res->redirect($c->uri_for('/maps', $map->user_id, $map->name));
+	$c->res->redirect($c->uri_for('/maps', $map->id, $map->name));
     } catch {
 	$c->detach(qw/Controller::Error index/);
     }
@@ -108,7 +108,7 @@ sub poi_rename  :Chained('poi') :PathPart('rename') :Args(0) {
     my $map = $c->stash->{map};
     my $poi = $c->stash->{poi};
     if ($c->req->params->{new_name}) { $poi->update({ name => $c->req->params->{new_name} }) }
-    $c->res->body($c->uri_for('/maps', $map->user_id, $map->name, $poi->id, $poi->name, 'edit'));
+    $c->res->body($c->uri_for('/maps', $map->id, $map->name, $poi->id, $poi->name, 'edit'));
 }
 
 __PACKAGE__->meta->make_immutable;
