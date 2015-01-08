@@ -53,7 +53,7 @@ __PACKAGE__->resultset_class('Oxiana::Data::Maps::ResultClass::Book');
 
 __PACKAGE__->set_primary_key("id");
 
-__PACKAGE__->has_many('sections' => 'Oxiana::Data::Maps::Result::Section', 
+__PACKAGE__->has_many('chapters' => 'Oxiana::Data::Maps::Result::Chapter', 
 		       { 'foreign.book_id' => 'self.id' });
 
 sub has_rights {
