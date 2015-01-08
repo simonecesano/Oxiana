@@ -1,0 +1,48 @@
+[% PROCESS 'site/leaflet.tt2' %]
+<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/jquery/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/jquery/jquery-ui.structure.css">
+<script src="[% c.uri_for('/static') %]/jquery/jquery-ui.js"></script>
+<script>
+  $(function() {
+      $('ol.items').sortable();
+      $('ol.items').disableSelection();
+  });
+</script>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>[% book = c.stash.book; book.name %]</h1>
+    </div>
+    
+    <div class="col-md-12">
+      <h2>Chapters</h2>
+      <div class="multicol">
+	<ol>
+	  [% FOR chapter = book.search_related_rs('chapters', {}).all %]
+	  <li><h4>[% chapter.name %]</h4></li>
+	  [% IF chapter.search_related_rs('items', {}).count > 0 %]<ol class="items">
+	    [% FOR item = chapter.search_related_rs('items', {}).all %]
+	    <li><a data-toggle="tooltip" class="item" href="[% c.uri_for('/maps', chapter.map.id, chapter.map.name, item.poi.id, item.poi.name) %]"
+		   >[% item.poi.name || "no name" %]</a> <i class="fa fa-[% item.poi.poi_type
+		   %]"></i></li>
+	  [% END %]
+	  </ol>[% END %]
+	  [% END %]
+	</ol>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <h2 class="item">Maps</h2>
+	The following maps were used in this book:<br>
+      <ol>
+	[% FOR map = book.search_related_rs('chapters')
+	                     .search_related_rs('items')
+	                     .search_related_rs('poi').search_related_rs('map', {}, { distinct => 1 }).all %]
+	<li><a href="[% c.uri_for('/maps', map.id, map.name) %]">[% map.name %]</a></li>
+	[% END %]
+      </ol>
+    </div>
+  </div>
+</div>
