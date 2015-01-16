@@ -1,0 +1,4 @@
+<script src="[% c.uri_for('/static') %]/bootstrap/js/bootstrap-modalmanager.js"></script>
+<script src="[% c.uri_for('/static') %]/bootstrap/js/bootstrap-modal.js"></script>
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/bootstrap/css/bootstrap-modal-bs3patch.css">
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static') %]/bootstrap/css/bootstrap-modal.css">

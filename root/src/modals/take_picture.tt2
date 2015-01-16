@@ -1,0 +1,48 @@
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Add POIs</h4>
+      </div>
+      <div class="modal-body">
+	<form role="form" class="form-horizontal">
+	  <div class="form-group">
+            <label for="book">Book:</label>
+	    <select class="form-control" data-style="btn-inverse" name="book_id" id="book_id">
+	      <option value="">select a book</option>
+	      [% FOR m = c.model('Maps::Book').search_rs({ 'user_id' => c.user.uid }).all %]
+	      <option value="[% m.id %]">[% m.name %]</option>
+	      [% END %]
+	    </select>
+	    <label for="chapter_select">Chapter:</label>
+	    <select class="form-control" data-style="btn-inverse" name="chapter_select" id="chapter_select">
+	      <option value="">select a chapter</option>
+	      [% FOR m = c.model('Maps::Chapter').search_rs({ }).all %]
+	      <option value="[% m.id %]">[% m.name %]</option>
+	      [% END %]
+	    </select>
+	    <label for="chapter_name">Chapter:</label>
+	    <input class="form-control" style="width=100%" name="chapter_name" id="chapter_name" type="text"> 
+	    <div class="checkbox"><label>
+		<input id="new_chapter" name="new_chapter" checked="false" type="checkbox">&nbsp;new chapter</label>
+	    </div>
+	  </div>
+	</form>
+      </div>
+      <div class="modal-footer">
+	<a class="btn btn-primary" id="f_add_final">add</a>
+	<a class="btn btn-primary" id="f_add_cancel">cancel</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    $('#f_add_final').on('click', function() {
+	$('#save_image_modal').modal('hide');
+	leafletImage(map,
+		     function(e, c){
+			 $.post("[% c.uri_for('/image') %]", { img: c.toDataURL() }, function(){  })
+			     .fail(function(d, f) { $('#error_modal').html(d.responseText).modal('show') })
+		     })
+    })
+    $('#f_add_cancel').on('click', function() { $('#save_image_modal').modal('hide') })
+  </script>

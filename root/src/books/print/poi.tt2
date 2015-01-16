@@ -1,0 +1,2 @@
+<h3>[% item.poi.name || "no name" %]</h3>
+[% item.poi.description %]<br /><hr />

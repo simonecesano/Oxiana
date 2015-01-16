@@ -1,0 +1,28 @@
+Backing up the database
+-----------------------
+
+Back up the schema for Oxiana on Heroku:
+
+    pg_dump -d d44c6mf52s147r \
+       -h ec2-54-225-101-18.compute-1.amazonaws.com \
+       -U qsoddivgkvhefi --schema-only -F p > oxiana_heroku.sql
+
+Back up the local schema for Oxiana:
+
+    pg_dump oxiana --schema-only -F p > oxiana_local.sql
+
+edit the user name:
+
+    perl -p -i -e 's/qsoddivgkvhefi/cesansim/g' oxiana_heroku.sql
+
+and check the differences:
+
+    diff oxiana_heroku.sql oxiana_local.sql 
+
+Backing up and restoring the Heroku data, and restoring it locally:
+
+    heroku pgbackups:capture
+    curl -o latest.dump `heroku pgbackups:url`
+    pg_restore --verbose --clean --no-acl --no-owner -U cesansim -d oxiana latest.dump
+
+That's all.

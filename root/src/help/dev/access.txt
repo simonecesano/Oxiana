@@ -1,0 +1,58 @@
+Types of objects
+----------------
+
+- root: maps, books
+- derived: pois, book items, chapters
+
+Types of access control
+-----------------------
+
+Access is determined at the single object level like so:
+
+    $i = $c->model('Maps::Map')->find({ id => 123 });
+    $i->update({ name => "Venezia" })
+        if $m->is_readable_by($c->user->uid)	
+
+or at the recordset level like so:
+
+    $s = $c->model('Maps::Map')->search({ name => { -like => "%enet%" }})->readable_by($c->user->uid)
+
+Root objects
+------------
+
+The user can read if he owns, he is allowed to write or he can read the object.
+The user car write if he owns, or he is allowed to write the object.
+
+Allowed to read or write means he is in the list of users contained in the can_read or can_write field.
+
+This is handled by a simple filter on the search.
+
+Derived objects
+---------------
+
+Derived objects get their read/write control from their parent object. So 
+
+    $poi->is_writeable_by($c->user->uid)
+
+means really
+
+    $poi->map->is_writeable_by($c->user->uid)
+
+which could be handled by a proxy in the result class.
+
+When retrieving a recordset that should probably be handled by using a subquery, so that
+
+    $pois->readable_by($c->user->uid)
+
+really means
+
+    $pois->search({ map_id =>
+    		  { -in => $pois->related_source('map')
+                            ->readable_by($c->user->uid)
+			                ->get_column('id')->as_query } })
+
+Conflicts
+----------
+
+What happens if a book is writeable by someone, and it pulls POIs from a map that is not readable by that user?
+

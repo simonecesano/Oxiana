@@ -1,0 +1,14 @@
+[% USE Filter::LaTeX(foo => 'bar', baz => 3 ) %]
+[% FILTER LaTeX %]
+
+<h1>[% book.name %]</h1>
+[% FOR chapter = book.search_related_rs('chapters', {}).all %]
+<h2>[% chapter.name %]</h2>
+[% IF chapter.search_related_rs('items', {}).count > 0 %]
+[% FOR item = chapter.search_related_rs('items', {}).all %]
+[% t = 'books/print/' _ item.type _ '.tt2'; INCLUDE $t %]
+[% END; # if %]
+[% END; # chapter %]
+[% END; # book %]
+
+[% END %]
