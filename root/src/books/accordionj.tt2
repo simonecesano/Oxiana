@@ -1,0 +1,6 @@
+	<div id="accordion">
+	  [% FOR m = c.stash.maps.all %]
+	  <h3>[% m.name %]</h3>
+	  <div>[% m.search_related_rs('pois').count %] pois</div>
+	  [% END %]
+	</div>

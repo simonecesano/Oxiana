@@ -1,0 +1,5 @@
+[% USE Markdown -%]
+this is included
+[% FILTER markdown %]
+[% c.stash.markdown %]
+[% END %]

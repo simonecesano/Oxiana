@@ -1,0 +1,6 @@
+<script>
+    $(function() {
+	// var title = '<i class="fa fa-pencil-square-o fa-lg"></i> <i class="fa fa-scissors fa-lg"></i> <i class="fa fa-arrow-up fa-lg"></i> <i class="fa fa-arrow-down fa-lg"></i>'
+	// $('[data-toggle="tooltip"]').tooltip({'placement': 'top', html: 1, title: title, delay: {show: 0, hide: 500 } });
+    });
+</script>

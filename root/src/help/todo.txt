@@ -3,6 +3,7 @@ general
 
 - fix current map (done)
 - refactor poi controller (done)
+- check login on home page etc.
 
 Main Map
 --------
@@ -21,6 +22,7 @@ POI
 - add website link
 - add phone number
 - delete poi (done)
+- add check before deleting POI
 - rename poi
 - move to another map
 
