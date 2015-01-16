@@ -72,13 +72,9 @@ sub book_new :Chained('base') :PathPart('new') :Args(0) {
 
 sub book_view :Chained('book') :PathPart('') :Args(0) {
     my ( $self, $c ) = @_;
-    
-    $c->log->info($c->user->user_id);
-    my $uid = $c->user->uid;
-    $c->stash->{maps} = $c->model('Maps::Map')->readable_by($uid);
-    
     $c->stash->{template} = 'books/view.tt2';
 }
+
 use JSON;
 use Data::Dump qw/dump/;
 
@@ -104,6 +100,15 @@ sub pois_add :Chained('base') :PathPart('pois/add') :Args(0) {
     }
     $c->res->body('hello');
 }
+
+sub book_print_view :Chained('book') :PathPart('print') :Args(0) {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'books/print.tt2';
+    $c->forward('View::TT');
+    
+}
+
+
 
 __PACKAGE__->meta->make_immutable;
 

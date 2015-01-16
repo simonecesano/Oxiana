@@ -13,7 +13,7 @@ Oxiana::Data::Maps::Result::UserRole
 use strict;
 use warnings;
 
-use base 'Oxiana::Data::Maps::Result';
+use base qw/DBIx::Class::Core/;
 
 =head1 TABLE: C<user_role>
 

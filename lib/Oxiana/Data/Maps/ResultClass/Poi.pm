@@ -27,3 +27,6 @@ sub writeable_by {
 }
 
 1
+
+
+__DATA__

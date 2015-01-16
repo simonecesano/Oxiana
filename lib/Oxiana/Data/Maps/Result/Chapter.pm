@@ -14,7 +14,7 @@ use strict;
 use warnings;
 
 # use base 'DBIx::Class::Core';
-use base 'Oxiana::Data::Maps::Result';
+use base 'Oxiana::Data::Maps::ItemClass::SubItem';
 
 =head1 TABLE: C<maps>
 

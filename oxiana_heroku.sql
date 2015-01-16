@@ -26,7 +26,7 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 SET search_path = public, pg_catalog;
 
 --
--- Name: update_modified_column(); Type: FUNCTION; Schema: public; Owner: qsoddivgkvhefi
+-- Name: update_modified_column(); Type: FUNCTION; Schema: public; Owner: cesansim
 --
 
 CREATE FUNCTION update_modified_column() RETURNS trigger
@@ -39,14 +39,14 @@ END;
 $$;
 
 
-ALTER FUNCTION public.update_modified_column() OWNER TO qsoddivgkvhefi;
+ALTER FUNCTION public.update_modified_column() OWNER TO cesansim;
 
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- Name: book_items; Type: TABLE; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: book_items; Type: TABLE; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 CREATE TABLE book_items (
@@ -62,10 +62,10 @@ CREATE TABLE book_items (
 );
 
 
-ALTER TABLE public.book_items OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.book_items OWNER TO cesansim;
 
 --
--- Name: book_items_id_seq; Type: SEQUENCE; Schema: public; Owner: qsoddivgkvhefi
+-- Name: book_items_id_seq; Type: SEQUENCE; Schema: public; Owner: cesansim
 --
 
 CREATE SEQUENCE book_items_id_seq
@@ -76,17 +76,17 @@ CREATE SEQUENCE book_items_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.book_items_id_seq OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.book_items_id_seq OWNER TO cesansim;
 
 --
--- Name: book_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: qsoddivgkvhefi
+-- Name: book_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cesansim
 --
 
 ALTER SEQUENCE book_items_id_seq OWNED BY book_items.id;
 
 
 --
--- Name: books; Type: TABLE; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: books; Type: TABLE; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 CREATE TABLE books (
@@ -99,10 +99,10 @@ CREATE TABLE books (
 );
 
 
-ALTER TABLE public.books OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.books OWNER TO cesansim;
 
 --
--- Name: books_id_seq; Type: SEQUENCE; Schema: public; Owner: qsoddivgkvhefi
+-- Name: books_id_seq; Type: SEQUENCE; Schema: public; Owner: cesansim
 --
 
 CREATE SEQUENCE books_id_seq
@@ -113,17 +113,31 @@ CREATE SEQUENCE books_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.books_id_seq OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.books_id_seq OWNER TO cesansim;
 
 --
--- Name: books_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: qsoddivgkvhefi
+-- Name: books_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cesansim
 --
 
 ALTER SEQUENCE books_id_seq OWNED BY books.id;
 
 
 --
--- Name: maps; Type: TABLE; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: chapters; Type: TABLE; Schema: public; Owner: cesansim; Tablespace: 
+--
+
+CREATE TABLE chapters (
+    id integer NOT NULL,
+    name character varying(64),
+    book_id integer NOT NULL,
+    map_id integer NOT NULL
+);
+
+
+ALTER TABLE public.chapters OWNER TO cesansim;
+
+--
+-- Name: maps; Type: TABLE; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 CREATE TABLE maps (
@@ -138,10 +152,10 @@ CREATE TABLE maps (
 );
 
 
-ALTER TABLE public.maps OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.maps OWNER TO cesansim;
 
 --
--- Name: maps_id_seq; Type: SEQUENCE; Schema: public; Owner: qsoddivgkvhefi
+-- Name: maps_id_seq; Type: SEQUENCE; Schema: public; Owner: cesansim
 --
 
 CREATE SEQUENCE maps_id_seq
@@ -152,17 +166,17 @@ CREATE SEQUENCE maps_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.maps_id_seq OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.maps_id_seq OWNER TO cesansim;
 
 --
--- Name: maps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: qsoddivgkvhefi
+-- Name: maps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cesansim
 --
 
 ALTER SEQUENCE maps_id_seq OWNED BY maps.id;
 
 
 --
--- Name: pictures; Type: TABLE; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: pictures; Type: TABLE; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 CREATE TABLE pictures (
@@ -173,10 +187,10 @@ CREATE TABLE pictures (
 );
 
 
-ALTER TABLE public.pictures OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.pictures OWNER TO cesansim;
 
 --
--- Name: pictures_id_seq; Type: SEQUENCE; Schema: public; Owner: qsoddivgkvhefi
+-- Name: pictures_id_seq; Type: SEQUENCE; Schema: public; Owner: cesansim
 --
 
 CREATE SEQUENCE pictures_id_seq
@@ -187,17 +201,17 @@ CREATE SEQUENCE pictures_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.pictures_id_seq OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.pictures_id_seq OWNER TO cesansim;
 
 --
--- Name: pictures_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: qsoddivgkvhefi
+-- Name: pictures_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cesansim
 --
 
 ALTER SEQUENCE pictures_id_seq OWNED BY pictures.id;
 
 
 --
--- Name: pois; Type: TABLE; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: pois; Type: TABLE; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 CREATE TABLE pois (
@@ -213,10 +227,10 @@ CREATE TABLE pois (
 );
 
 
-ALTER TABLE public.pois OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.pois OWNER TO cesansim;
 
 --
--- Name: pois_id_seq; Type: SEQUENCE; Schema: public; Owner: qsoddivgkvhefi
+-- Name: pois_id_seq; Type: SEQUENCE; Schema: public; Owner: cesansim
 --
 
 CREATE SEQUENCE pois_id_seq
@@ -227,17 +241,17 @@ CREATE SEQUENCE pois_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.pois_id_seq OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.pois_id_seq OWNER TO cesansim;
 
 --
--- Name: pois_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: qsoddivgkvhefi
+-- Name: pois_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cesansim
 --
 
 ALTER SEQUENCE pois_id_seq OWNED BY pois.id;
 
 
 --
--- Name: roles; Type: TABLE; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: roles; Type: TABLE; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 CREATE TABLE roles (
@@ -246,10 +260,10 @@ CREATE TABLE roles (
 );
 
 
-ALTER TABLE public.roles OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.roles OWNER TO cesansim;
 
 --
--- Name: user_role; Type: TABLE; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: user_role; Type: TABLE; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 CREATE TABLE user_role (
@@ -258,10 +272,10 @@ CREATE TABLE user_role (
 );
 
 
-ALTER TABLE public.user_role OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.user_role OWNER TO cesansim;
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 CREATE TABLE users (
@@ -275,45 +289,45 @@ CREATE TABLE users (
 );
 
 
-ALTER TABLE public.users OWNER TO qsoddivgkvhefi;
+ALTER TABLE public.users OWNER TO cesansim;
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: qsoddivgkvhefi
+-- Name: id; Type: DEFAULT; Schema: public; Owner: cesansim
 --
 
 ALTER TABLE ONLY book_items ALTER COLUMN id SET DEFAULT nextval('book_items_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: qsoddivgkvhefi
+-- Name: id; Type: DEFAULT; Schema: public; Owner: cesansim
 --
 
 ALTER TABLE ONLY books ALTER COLUMN id SET DEFAULT nextval('books_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: qsoddivgkvhefi
+-- Name: id; Type: DEFAULT; Schema: public; Owner: cesansim
 --
 
 ALTER TABLE ONLY maps ALTER COLUMN id SET DEFAULT nextval('maps_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: qsoddivgkvhefi
+-- Name: id; Type: DEFAULT; Schema: public; Owner: cesansim
 --
 
 ALTER TABLE ONLY pictures ALTER COLUMN id SET DEFAULT nextval('pictures_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: qsoddivgkvhefi
+-- Name: id; Type: DEFAULT; Schema: public; Owner: cesansim
 --
 
 ALTER TABLE ONLY pois ALTER COLUMN id SET DEFAULT nextval('pois_id_seq'::regclass);
 
 
 --
--- Name: book_items_pkey; Type: CONSTRAINT; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: book_items_pkey; Type: CONSTRAINT; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 ALTER TABLE ONLY book_items
@@ -321,7 +335,7 @@ ALTER TABLE ONLY book_items
 
 
 --
--- Name: books_pkey; Type: CONSTRAINT; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: books_pkey; Type: CONSTRAINT; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 ALTER TABLE ONLY books
@@ -329,7 +343,7 @@ ALTER TABLE ONLY books
 
 
 --
--- Name: maps_pkey; Type: CONSTRAINT; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: maps_pkey; Type: CONSTRAINT; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 ALTER TABLE ONLY maps
@@ -337,7 +351,7 @@ ALTER TABLE ONLY maps
 
 
 --
--- Name: pictures_pkey; Type: CONSTRAINT; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: pictures_pkey; Type: CONSTRAINT; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 ALTER TABLE ONLY pictures
@@ -345,7 +359,7 @@ ALTER TABLE ONLY pictures
 
 
 --
--- Name: pois_pkey; Type: CONSTRAINT; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: pois_pkey; Type: CONSTRAINT; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 ALTER TABLE ONLY pois
@@ -353,7 +367,7 @@ ALTER TABLE ONLY pois
 
 
 --
--- Name: roles_pkey; Type: CONSTRAINT; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: roles_pkey; Type: CONSTRAINT; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 ALTER TABLE ONLY roles
@@ -361,7 +375,7 @@ ALTER TABLE ONLY roles
 
 
 --
--- Name: user_role_pkey; Type: CONSTRAINT; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: user_role_pkey; Type: CONSTRAINT; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 ALTER TABLE ONLY user_role
@@ -369,7 +383,7 @@ ALTER TABLE ONLY user_role
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: qsoddivgkvhefi; Tablespace: 
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: cesansim; Tablespace: 
 --
 
 ALTER TABLE ONLY users
@@ -377,14 +391,14 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: update_customer_modtime; Type: TRIGGER; Schema: public; Owner: qsoddivgkvhefi
+-- Name: update_customer_modtime; Type: TRIGGER; Schema: public; Owner: cesansim
 --
 
 CREATE TRIGGER update_customer_modtime BEFORE UPDATE ON pois FOR EACH ROW EXECUTE PROCEDURE update_modified_column();
 
 
 --
--- Name: user_role_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: qsoddivgkvhefi
+-- Name: user_role_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: cesansim
 --
 
 ALTER TABLE ONLY user_role
@@ -392,7 +406,7 @@ ALTER TABLE ONLY user_role
 
 
 --
--- Name: user_role_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: qsoddivgkvhefi
+-- Name: user_role_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: cesansim
 --
 
 ALTER TABLE ONLY user_role
@@ -400,12 +414,12 @@ ALTER TABLE ONLY user_role
 
 
 --
--- Name: public; Type: ACL; Schema: -; Owner: qsoddivgkvhefi
+-- Name: public; Type: ACL; Schema: -; Owner: cesansim
 --
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM qsoddivgkvhefi;
-GRANT ALL ON SCHEMA public TO qsoddivgkvhefi;
+REVOKE ALL ON SCHEMA public FROM cesansim;
+GRANT ALL ON SCHEMA public TO cesansim;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 

@@ -23,11 +23,45 @@ Catalyst Controller.
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
-    open my $fh, '>', 'foobar.png';
-    print $fh $c->req->params->{img};
-    $c->response->body('Matched Oxiana::Controller::Image in Image.');
-}
 
+    my $re = quotemeta("data:image/png;base64,");
+    my $img = $c->req->params->{img}; $img =~ s/^$re//;
+
+    if ($img) {
+	$c->res->status(500);
+	$c->detach('Modal', 'index', [ 'error' ]);
+    } else {
+    
+	# my $cmd = printf "echo \"%s\" | base64 -D > foobar.png", $img;
+	
+	# $c->log->info(qx/$cmd/);
+	my $m = $c->model('Maps::BookItem');
+	my $pois = $m->search(poi_id => $c->req->params->{poi_id});
+	my $poi;
+	for ($pois->count) {
+	    /^0$/ && do {
+		# ask for chapter
+		last;
+	    };
+	    /^1$/ && do {
+		$poi = $pois->first;
+		last;
+	    };
+	    # ask for book and chapter
+	}
+	
+	# my $item = $m->create({ item_type => 'map', poi_id => $poi->id, content => $img, book_id => $poi->book_id, chapter_id => $poi->chapter_id }); 
+	
+	# check that the book exists
+	# check whether the poi is in a chapter, and if so, add
+	# if not pop up a window
+	
+	# open my $fh, '>', 'foobar_2.base64.png';
+	# print $fh $img;
+	
+	$c->detach('Modal', 'index', [ 'take_picture' ]);
+    }
+}
 
 
 =encoding utf8

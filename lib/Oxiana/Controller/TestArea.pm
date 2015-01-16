@@ -52,6 +52,37 @@ EOF
     $c->stash->{template} = 'test_area/foo.tt2';
 }
 
+use Data::Dump qw/dump/;
+
+sub wbr :Path(wbr) :Args(1) {
+    my ($self, $c, $user) = @_;
+
+    my $m = $c->model('Maps::Map');
+    my $u = $m->readable_by($user);
+    
+    $c->res->content_type('text/plain');
+    $c->res->body(dump [ $u->as_query, $u->count ]);
+}
+
+sub wbi :Path(wbi) :Args(1) {
+    my ($self, $c, $user) = @_;
+
+    my $m = $c->model('Maps::Poi');
+    my $u = $m->readable_by($user);
+    
+    $c->res->content_type('text/plain');
+    $c->res->body(dump [ $u->as_query, $u->count ]);
+}
+
+sub wba :Path(wba) :Args(0) {
+    my ($self, $c, $user) = @_;
+
+    my $m = $c->model('Maps::Poi');
+    my $u = $m;
+    
+    $c->res->content_type('text/plain');
+    $c->res->body(dump [ $u->as_query, $u->count ]);
+}
 
 =encoding utf8
 

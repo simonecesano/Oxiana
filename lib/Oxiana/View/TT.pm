@@ -4,9 +4,17 @@ use namespace::autoclean;
 
 extends 'Catalyst::View::TT';
 
-__PACKAGE__->config(
-    TEMPLATE_EXTENSION => '.tt2',
-    render_die => 1,
+__PACKAGE__->config
+    (
+     TEMPLATE_EXTENSION => '.tt2',
+     render_die => 1,
+     INCLUDE_PATH => [
+		      Oxiana->path_to( 'root', 'src' ),
+		      Oxiana->path_to( 'root', 'lib' )
+		     ],
+     ENCODING     => 'utf-8',
+     ERROR        => 'error.tt2',
+     PLUGIN_BASE => 'Oxiana::TT::Plugin',
 );
 
 =head1 NAME

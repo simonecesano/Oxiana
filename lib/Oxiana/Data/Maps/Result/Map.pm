@@ -4,7 +4,7 @@ package Oxiana::Data::Maps::Result::Map;
 use strict;
 use warnings;
 
-use base 'Oxiana::Data::Maps::Result';
+use base 'Oxiana::Data::Maps::ItemClass::RootItem';
 
 __PACKAGE__->table("maps");
 
@@ -34,27 +34,6 @@ __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->has_many('pois' => 'Oxiana::Data::Maps::Result::Poi', 
 		       { 'foreign.map_id' => 'self.id' });
-
-sub has_rights {
-    my ($self, $user, $rights) = @_;
-    return 1 if $self->can_read eq '*';
-
-    my $uid = ref $user ? $user->uid : $user;
-    return 1 if $self->user_id eq $uid;
-
-    $uid = quotemeta($uid);
-    return $self->can_read =~ /$uid/;
-}
-
-sub is_readable_by {
-    my ($self, $user) = @_;
-    return $self->has_rights($user, 'can_read');
-}
-
-sub is_writeable_by {
-    my ($self, $user) = @_;
-    return $self->has_rights($user, 'can_write');
-}
 
 
 1;

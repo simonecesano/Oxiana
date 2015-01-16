@@ -14,7 +14,7 @@ use strict;
 use warnings;
 
 # use base 'DBIx::Class::Core';
-use base 'Oxiana::Data::Maps::Result';
+use base 'Oxiana::Data::Maps::ItemClass::SubItem';
 
 =head1 TABLE: C<maps>
 
@@ -51,6 +51,8 @@ __PACKAGE__->belongs_to('book' => 'Oxiana::Data::Maps::Result::Book',
 
 __PACKAGE__->might_have('poi' => 'Oxiana::Data::Maps::Result::Poi', 
 		       { 'foreign.id' => 'self.poi_id' });
+
+__PACKAGE__->source_info({ "_parent_class" => 'book' });
 
 1;
 

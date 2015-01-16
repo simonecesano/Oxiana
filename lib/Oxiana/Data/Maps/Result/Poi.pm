@@ -2,8 +2,9 @@ package Oxiana::Data::Maps::Result::Poi;
 
 use strict;
 use warnings;
+use Moose;
 
-use base 'Oxiana::Data::Maps::Result';
+extends 'Oxiana::Data::Maps::ItemClass::SubItem';
 
 __PACKAGE__->table("pois");
 
@@ -36,11 +37,12 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
-__PACKAGE__->resultset_class('Oxiana::Data::Maps::ResultClass::Poi');
+__PACKAGE__->resultset_class('Oxiana::Data::Maps::ResultClass::SubItems');
 
 __PACKAGE__->belongs_to('map' => 'Oxiana::Data::Maps::Result::Map', 
 		       { 'foreign.id' => 'self.map_id' });
 
+__PACKAGE__->source_info({ "_parent_class" => 'map' });
 
 sub has_description {
     my $self = shift;

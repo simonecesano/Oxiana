@@ -1,20 +1,21 @@
 [% PROCESS 'site/leaflet.tt2' %]
 [% poi = c.stash.poi %]
 <script>
+var map;    
+// console.log($(document.currentScript).html());
 $(function(){
-    var map = L.map('map').setView([ [% poi.lat %], [% poi.lon %] ], 18);
-    map.on('moveend', function() { 
-        // console.log(map.getBounds().pad(5).toBBoxString());
-    });	 
+    map = L.map('map').setView([ [% poi.lat %], [% poi.lon %] ], 18);
 
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-    var m = L.marker(
-	[[% poi.lat %], [% poi.lon %]]
-    );
+    var m = L.marker( [[% poi.lat %], [% poi.lon %]] );
+    L.easyButton('fa-camera',
+		 function(){
+		     $('#save_image_modal').load('/modal/take_picture', '', function(){ $(this).modal('show') });
+		 },
+		 'Snap a picture of the map', map );
     m.addTo(map).bindPopup("[% poi.name %]");
-    console.log(m._icon.outerHTML);
 })
 </script>
 <style>
@@ -43,3 +44,5 @@ $(function(){
     </div>	
   </div>
 </div>
+<div class="modal fade" id="save_image_modal"></div>
+<div class="modal fade" id="error_modal"></div>

@@ -14,7 +14,7 @@ use strict;
 use warnings;
 
 # use base 'DBIx::Class::Core';
-use base 'Oxiana::Data::Maps::Result';
+use base 'Oxiana::Data::Maps::ItemClass::RootItem';
 
 =head1 TABLE: C<maps>
 
@@ -38,7 +38,7 @@ __PACKAGE__->add_columns
      { data_type => "text", is_nullable => 1 },
 );
 
-__PACKAGE__->resultset_class('Oxiana::Data::Maps::ResultClass::Book');
+__PACKAGE__->resultset_class('Oxiana::Data::Maps::ResultClass::RootItems');
 
 =head1 PRIMARY KEY
 
