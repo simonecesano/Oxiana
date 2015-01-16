@@ -1,48 +1,56 @@
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">Add POIs</h4>
-      </div>
-      <div class="modal-body">
-	<form role="form" class="form-horizontal">
-	  <div class="form-group">
-            <label for="book">Book:</label>
-	    <select class="form-control" data-style="btn-inverse" name="book_id" id="book_id">
-	      <option value="">select a book</option>
-	      [% FOR m = c.model('Maps::Book').search_rs({ 'user_id' => c.user.uid }).all %]
-	      <option value="[% m.id %]">[% m.name %]</option>
-	      [% END %]
-	    </select>
-	    <label for="chapter_select">Chapter:</label>
-	    <select class="form-control" data-style="btn-inverse" name="chapter_select" id="chapter_select">
-	      <option value="">select a chapter</option>
-	      [% FOR m = c.model('Maps::Chapter').search_rs({ }).all %]
-	      <option value="[% m.id %]">[% m.name %]</option>
-	      [% END %]
-	    </select>
-	    <label for="chapter_name">Chapter:</label>
-	    <input class="form-control" style="width=100%" name="chapter_name" id="chapter_name" type="text"> 
-	    <div class="checkbox"><label>
-		<input id="new_chapter" name="new_chapter" checked="false" type="checkbox">&nbsp;new chapter</label>
-	    </div>
-	  </div>
-	</form>
-      </div>
-      <div class="modal-footer">
-	<a class="btn btn-primary" id="f_add_final">add</a>
-	<a class="btn btn-primary" id="f_add_cancel">cancel</a>
-      </div>
+<div id="take_map_picture" class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      <h4 class="modal-title">Take map snapshot</h4>
+    </div>
+    <div class="modal-body">
+      <form role="form" class="form-horizontal">
+	<div class="form-group">
+          <label for="book">Book:</label>
+	  <select class="form-control" data-style="btn-inverse" name="book_id" id="book_id">
+	    <option value="">select a book</option>
+	    [% FOR m = c.model('Maps::Book').search_rs({ 'user_id' => c.user.uid }).all %]
+	    <option value="[% m.id %]">[% m.name %]</option>
+	    [% END %]
+	  </select>
+	  <label for="chapter_select">Chapter:</label>
+	  <select class="form-control" data-style="btn-inverse" name="chapter_select" id="chapter_select">
+	    <option value="">select a chapter</option>
+	  </select>
+	</div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <a class="btn btn-primary" id="f_add_final">add</a>
+      <a class="btn btn-primary" id="f_add_cancel">cancel</a>
     </div>
   </div>
-  <script>
-    $('#f_add_final').on('click', function() {
-	$('#save_image_modal').modal('hide');
+</div>
+<script>
+    var chapters;
+    $.get("[% c.uri_for('/api/maps/chapter') %]", { map_id: map_id }, function(d) { chapters = d });
+    $('#take_map_picture #book_id').on('change', function(){
+        var book_id = $(this).val();
+	$('#take_map_picture #chapter_select option:not(:first)').remove();
+        _.each(chapters, function(i) { if(i.book_id == book_id) {
+	    var o = $('<option value="' + i.id + '">' + i.name + '</option>');
+	    $('#take_map_picture #chapter_select').append(o)
+	} })
+    });    
+    $('#take_map_picture #f_add_cancel').on('click', function() { console.log('hiding'); $('#take_map_picture').parent().modal('hide') })
+    $('#take_map_picture #f_add_final').on('click', function() {
+	$('#take_map_picture').parent().modal('hide');
 	leafletImage(map,
 		     function(e, c){
-			 $.post("[% c.uri_for('/image') %]", { img: c.toDataURL() }, function(){  })
+			 $.post("[% c.uri_for('/image') %]",
+				{
+				  img: c.toDataURL(),
+				  poi_id: poi_id,
+				  book_id: $('#take_map_picture #book_id').val(),
+				  chapter_id: $('#take_map_picture #chapter_select').val(),
+				}, function(){ console.log( $('.modal-body #chapter_select').val()) })
 			     .fail(function(d, f) { $('#error_modal').html(d.responseText).modal('show') })
 		     })
     })
-    $('#f_add_cancel').on('click', function() { $('#save_image_modal').modal('hide') })
-  </script>
+</script>
