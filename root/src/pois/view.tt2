@@ -3,6 +3,8 @@
 <script>
 var map;    
 // console.log($(document.currentScript).html());
+var poi_id = [% poi.id %];
+var map_id = [% poi.map_id %];
 $(function(){
     map = L.map('map').setView([ [% poi.lat %], [% poi.lon %] ], 18);
 
@@ -32,7 +34,7 @@ $(function(){
       <div id="description">[% poi.description %]</div>
       <div id="hours">[% poi.extended_data.hours.replace("\n", '<br />').replace("\t", ': ') %]</div>
       <div class="buttons">
-	<a class="btn btn-primary btn-sm" href="/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name %]/edit">edit</a>
+	<a class="btn btn-primary btn-sm" href="/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name | uri %]/edit">edit</a>
 	<a class="btn btn-primary btn-sm" href="/maps/[% c.stash.map.id %]/[% c.stash.map.name %]">back to map</a>
       </div>
     </div>
