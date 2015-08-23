@@ -28,6 +28,11 @@ sub map :Chained('base') :PathPart('') :CaptureArgs(2) {
 
 sub map_view :Chained('map') :PathPart('') :Args(0) {
     my ( $self, $c ) = @_;
+    $c->stash->{template} = 'maps/view.tt2';
+}
+
+sub map_list :Chained('map') :PathPart('list') :Args(0) {
+    my ( $self, $c ) = @_;
     $c->stash->{template} = 'maps/list.tt2';
 }
 

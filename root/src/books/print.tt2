@@ -1,4 +1,8 @@
-[% USE Filter::LaTeX(foo => 'bar', baz => 3 ) %]
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      
+      [% USE Filter::LaTeX(foo => 'bar', baz => 3 ) %]
 [% FILTER LaTeX %]
 
 <h1>[% book.name %]</h1>
@@ -12,3 +16,6 @@
 [% END; # book %]
 
 [% END %]
+    </div>
+  </div>
+</div>

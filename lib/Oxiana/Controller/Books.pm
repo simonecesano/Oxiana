@@ -104,7 +104,7 @@ sub pois_add :Chained('base') :PathPart('pois/add') :Args(0) {
 sub book_print_view :Chained('book') :PathPart('print') :Args(0) {
     my ( $self, $c ) = @_;
     $c->stash->{template} = 'books/print.tt2';
-    $c->forward('View::TT');
+    $c->forward('View::HTML');
     
 }
 

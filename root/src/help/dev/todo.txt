@@ -18,7 +18,10 @@ POI
 
 - fix buttons style (done)
 - show/hide other things close by
-- add take shot to map
+- add take shot to map (done)
+- add take shot to edit view
+- add meaningful defaults to taking shot
+- auto shot on creation
 - add website link
 - add phone number
 - delete poi (done)

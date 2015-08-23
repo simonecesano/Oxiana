@@ -42,7 +42,15 @@ __PACKAGE__->resultset_class('Oxiana::Data::Maps::ResultClass::SubItems');
 __PACKAGE__->belongs_to('map' => 'Oxiana::Data::Maps::Result::Map', 
 		       { 'foreign.id' => 'self.map_id' });
 
+__PACKAGE__->has_many('book_items' => 'Oxiana::Data::Maps::Result::BookItem', 
+			{
+			 'foreign.poi_id' => 'self.id',
+			});
+
+
 __PACKAGE__->source_info({ "_parent_class" => 'map' });
+
+
 
 sub has_description {
     my $self = shift;
@@ -56,6 +64,18 @@ sub TO_JSON {
 
 sub as_XML {
     return "this is a stub";
+}
+
+use HTML::TreeBuilder;
+
+sub print_description {
+    my $desc = shift->description;
+    return "" unless $desc;
+    my $html = HTML::TreeBuilder->new_from_content($desc);
+    for ($html->find('a')) {
+	$_->replace_with($_->as_text)
+    }
+    return $html->find('body')->content->[0]->as_HTML(undef, " ");
 }
 
 1;

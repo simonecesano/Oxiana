@@ -1,2 +1,15 @@
+[% IF item.poi.print_description.length %]
 <h3>[% item.poi.name || "no name" %]</h3>
-[% item.poi.description %]<br /><hr />
+[% IF item.poi.extended_data.address.length > 0 %]
+[% item.poi.extended_data.address %]<p />
+[% END %]
+[% item.poi.print_description %]<br />
+[% IF item.poi.extended_data.hours.length > 0 %]<h4>Hours</h4>
+[% item.poi.extended_data.hours.replace("\n", "<br />") %]<br />
+[% END %]
+[% FOR i = item.search_related('related_items', { '-not' => { 'id' => item.id }, '-not' => { 'item_type' => 'poi' }} ) %]
+<!-- [% i.id %] [% i.type %] -->
+[% t = 'books/print/' _ i.type _ '.tt2'; INCLUDE $t %]
+[% END %]
+<hr />
+[% END %]

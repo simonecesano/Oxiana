@@ -23,6 +23,8 @@ Catalyst Controller.
 
 sub index :Path :Args(1) {
     my ( $self, $c, $template ) = @_;
+
+    $c->log->info($c->req->referer);
     $c->stash->{template} = join '', 'modals/', $template, '.tt2';
     $c->forward('View::TT');
 }

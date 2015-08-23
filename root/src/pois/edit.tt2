@@ -1,56 +1,29 @@
+<script src="[% c.uri_for('/static') %]/lib/handlebars.min.js"></script>
 <script src="[% c.uri_for('/static') %]/bootstrap/js/bootstrap-select.min.js"></script>
 <link href="[% c.uri_for('/static') %]/bootstrap/css/bootstrap-select.min.css" rel="stylesheet">
-[%-
-   poi_types = [
-  "home", 
-  "bar",
-  "restaurant",
-  "cocktail bar",
-  "museum",
-  "stadium",
-  "taxi",
-  "beer",
-  "recycling",
-  "postoffice",
-  "bookstore",
-  "bus stop",
-  "supermarket",
-]
--%]
 [% PROCESS 'site/leaflet.tt2' %]
 [% poi = c.stash.poi %]
+[%- poi_types = [ "home", "bar", "restaurant", "cocktail bar", "museum", "stadium", "taxi", "beer", "recycling", "postoffice", "bookstore", "bus stop", "supermarket"] -%]
 <script>
-    $(function(){
-	$('#rename_btn, #rename_cancel').click(function(){ $('#rename_poi').modal('toggle') });
-    	$('#rename_final').click(
-	    function(){
-		$.post(
-		    "/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name %]/rename",
-		    { new_name: $('#new_name').val(), new_map: $('#new_map').val(), id: $('#id').val(), map_id: $('#map_id').val() },
-		    function(d) { window.location.href = d }
-		);
-		$('#rename_poi').modal('toggle');
-	    }
-	);
-	
-	var map = L.map('map').setView([ [% poi.lat %], [% poi.lon %] ], 18);
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-	    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-	}).addTo(map);
-	L.marker(
-	[[% poi.lat %], [% poi.lon %]],
-	    { draggable: true }
-	)
-	    .addTo(map)
-	    .bindPopup("[% poi.name %]")
-	    .on('dragend', function(event){
-		var marker = event.target;
-		var position = marker.getLatLng();
-		console.log(position)
-		$('#lat').val(position.lat);
-		$('#lon').val(position.lng);
-	    })
-    });
+  $(function(){
+      var map = L.map('map').setView([ [% poi.lat %], [% poi.lon %] ], 18);
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+	  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+      L.marker(
+	  [[% poi.lat %], [% poi.lon %]],
+	  { draggable: true }
+      )
+	  .addTo(map)
+	  .bindPopup("[% poi.name %]")
+	  .on('dragend', function(event){
+	      var marker = event.target;
+	      var position = marker.getLatLng();
+	      console.log(position)
+	      $('#lat').val(position.lat);
+	      $('#lon').val(position.lng);
+	  })
+  });
 </script>
 <style>
 #map { height: 480px; margin-top: 24px }
@@ -67,6 +40,8 @@
       <ul class="nav nav-tabs">
 	<li><a role="tab" data-toggle="tab" href="#address">Address</a></li>
 	<li><a role="tab" data-toggle="tab" href="#description">Description</a></li>
+	<li><a role="tab" data-toggle="tab" href="#places">Google Places</a></li>
+	<li><a role="tab" data-toggle="tab" href="#books">Books</a></li>
       </ul>
       <div class="tab-content">
 	<div id="address" class="col-md-12 tab-pane active">
@@ -100,43 +75,44 @@
           <span style="margin:6px"><textarea name="editor" id="editor" rows="30" cols="80">[% c.stash.poi.description %]</textarea></span>
           <script>CKEDITOR.replace( 'editor' )</script>
 	</div>
+	<div id="places" class="col-md-12 tab-pane">
+	  Google places stuff goes here
+	</div>
+	<div id="books" class="col-md-12 tab-pane">
+	  This point of interest appears in the following books:<p />
+	  <ul>
+	  [% bi = c.stash.poi.search_related_rs('book_items', {}) %]
+	  [% FOR b = bi.search_related_rs('book', {}, { columns => ['name', 'id', 'user_id'], distinct => 1}).all %]
+	  <li><a href="[% c.uri_for('/books', b.user_id, b.id, b.name ) %]">[% b.name %]</a>
+	    ([% bi.search_related_rs('chapter', { 'chapter.book_id' => b.id }, { columns => ['name'], distinct => 1
+	    }).get_column('name').all.join('; ') %])
+	  </li>
+	  [% END %]
+	  </ul>
+	  [% ri = bi.search_related_rs('related_items', { 'related_items.item_type' => { '!=' => 'poi' } }, { columns =>
+	  ['item_type', 'id' ], distinct => 1}) %]
+	  [% IF ri.count > 0 %]
+	  It has additional assets associated with it:<br />
+	  <ul>
+	  [% FOR b = ri.all %]
+	  <li>[% b.type %] (id [% b.id %])</li>
+	  [% END %]
+	  </ul>
+	  [% ELSE %]
+	  It has no additional assets associated with it<br />
+	  [% END %]
+	</div>
       </div>
       <div class="col-md-12">
 	<input type="submit" style="margin:6px" type="button" class="btn btn-primary" value="save"><a class="btn btn-primary" href=".">view</a>
 	<a class="btn btn-primary" id="rename_btn">rename</a>
-	<a class="btn btn-primary" href="/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name %]/delete">delete</a>
+	<a class="btn btn-primary" id="delete_btn" href="/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/[% poi.id %]/[% poi.name %]/delete">delete</a>
 	<a class="btn btn-primary" href="/maps/[% poi.map.id %]/[% poi.map.name %]">go to map</a>
       </div>
     </form>
   </div>
 </div>
-<div id="rename_poi" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">Rename POI</h4>
-      </div>
-      <div class="modal-body">
-	<form role="form">
-	  <div class="form-group">
-	    <label for="new_name">New name:</label>
-	    <input type="text" name="new_name" class="form-control" id="new_name" value="[% c.stash.poi.name %]">
-	  </div>
-	  <div class="form-group">
-            <label for="map">Map:</label><br />
-	    <select class="selectpicker" data-style="btn-inverse" name="new_map" id="new_map">
-	      [% FOR m = c.model('Maps::Map').search({ 'user_id' => c.user.uid }) %]
-	      <option value="[% m.id %]">[% m.name %]</option>
-	      [% END %]
-	    </select>
-	  </div>
-	</form>
-      </div>
-      <div class="modal-footer">
-	<a class="btn btn-primary" id="rename_final">rename</a>
-	<a class="btn btn-primary" id="rename_cancel">cancel</a>
-      </div>
-    </div>
-  </div>
-</div>
+<div class="modal fade" id="rename_modal"></div><script>
+$(function(){ $('#rename_btn').click(function(){ $('#rename_modal').load('/modal/rename_poi', '', function(){ $(this).modal('show') }) }) })
+</script>
+<div class="modal fade" id="error_modal"></div>

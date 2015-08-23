@@ -137,6 +137,27 @@ CREATE TABLE chapters (
 ALTER TABLE public.chapters OWNER TO cesansim;
 
 --
+-- Name: chapters_id_seq; Type: SEQUENCE; Schema: public; Owner: cesansim
+--
+
+CREATE SEQUENCE chapters_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.chapters_id_seq OWNER TO cesansim;
+
+--
+-- Name: chapters_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: cesansim
+--
+
+ALTER SEQUENCE chapters_id_seq OWNED BY chapters.id;
+
+
+--
 -- Name: maps; Type: TABLE; Schema: public; Owner: cesansim; Tablespace: 
 --
 
@@ -309,6 +330,13 @@ ALTER TABLE ONLY books ALTER COLUMN id SET DEFAULT nextval('books_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: cesansim
 --
 
+ALTER TABLE ONLY chapters ALTER COLUMN id SET DEFAULT nextval('chapters_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: cesansim
+--
+
 ALTER TABLE ONLY maps ALTER COLUMN id SET DEFAULT nextval('maps_id_seq'::regclass);
 
 
@@ -340,6 +368,14 @@ ALTER TABLE ONLY book_items
 
 ALTER TABLE ONLY books
     ADD CONSTRAINT books_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chapters_pkey; Type: CONSTRAINT; Schema: public; Owner: cesansim; Tablespace: 
+--
+
+ALTER TABLE ONLY chapters
+    ADD CONSTRAINT chapters_pkey PRIMARY KEY (id);
 
 
 --
@@ -388,6 +424,34 @@ ALTER TABLE ONLY user_role
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: book_items_idx_book_id; Type: INDEX; Schema: public; Owner: cesansim; Tablespace: 
+--
+
+CREATE INDEX book_items_idx_book_id ON book_items USING btree (book_id);
+
+
+--
+-- Name: book_items_idx_poi_id; Type: INDEX; Schema: public; Owner: cesansim; Tablespace: 
+--
+
+CREATE INDEX book_items_idx_poi_id ON book_items USING btree (poi_id);
+
+
+--
+-- Name: chapters_idx_book_id; Type: INDEX; Schema: public; Owner: cesansim; Tablespace: 
+--
+
+CREATE INDEX chapters_idx_book_id ON chapters USING btree (book_id);
+
+
+--
+-- Name: chapters_idx_map_id; Type: INDEX; Schema: public; Owner: cesansim; Tablespace: 
+--
+
+CREATE INDEX chapters_idx_map_id ON chapters USING btree (map_id);
 
 
 --

@@ -59,7 +59,7 @@ sub oauth :Path Args(1) {
 	#------------------------------
 	# need to redirect somewhere
 	#------------------------------
-	$c->res->redirect($c->session->{login_referer} || $c->uri_for("/maps", $c->user->uid));
+	$c->res->redirect($c->uri_for("/maps", $c->user->uid || $c->session->{login_referer}));
 
 	# $c->res->body('authenticated! "'. $c->user->uid . '"');
     }

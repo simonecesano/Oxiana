@@ -14,7 +14,7 @@ $(function(){
     var m = L.marker( [[% poi.lat %], [% poi.lon %]] );
     L.easyButton('fa-camera',
 		 function(){
-		     $('#save_image_modal').load('/modal/take_picture', '', function(){ $(this).modal('show') });
+		     $('#save_image_modal').load('/modal/take_picture', { id: "[% poi.id %]"}, function(){ $(this).modal('show') });
 		 },
 		 'Snap a picture of the map', map );
     m.addTo(map).bindPopup("[% poi.name %]");

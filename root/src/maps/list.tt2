@@ -2,80 +2,6 @@
 <script src="[% c.uri_for('/static') %]/lib/json2.js"></script>
 [% PROCESS 'site/leaflet.tt2' %]
 <script src="[% c.uri_for('/static') %]/leaflet/leaflet.oxiana-markers.js"></script>
-
-<style>
-#map { height: 640px; margin-top: 32px }
-</style>
-<script id="nre_poi_tpl" type="text/x-handlebars-template">
-  var c = ['rgb(166,206,227)','rgb(31,120,180)','rgb(178,223,138)','rgb(51,160,44)',
-  'rgb(251,154,153)','rgb(227,26,28)','rgb(253,191,111)','rgb(255,127,0)',
-   'rgb(202,178,214)','rgb(106,61,154)','rgb(255,255,153)','rgb(177,89,40)']
-</script>
-<script type="text/javascript">
-    var marker_group = [];
-    var poi_list = [];
-    var map;
-    var map_id = [% c.stash.map.id %];
-    $(function(){
-	var redMarker = L.OxianaMarkers.icon({ number: 20 });
-	map = L.map('map').setView([ 0, 0 ], 1);
-	L.control.scale().addTo(map);
-	var oldIcon;
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
-	L.easyButton('fa-camera',
-		     function(){
-			 leafletImage(map,
-				      function(err, canvas){
-					  $.post("[% c.uri_for('/image') %]", { img: canvas.toDataURL() }) })
-		     }, 'Snap a picture of the map', map );
-	var hash = L.hash(map);
-	var markers = {};
-	$.getJSON(
-	    "[% c.uri_for('/api/maps/poi') %]",
-	    { 'map_id': [% c.stash.map.id %] },
-	    function(poi) {
-		// poi_list = JSON.parse(JSON.stringify(poi));
-		poi = _.sortBy(poi, function(e){ return e.name });
-		_.each(poi, function(e, i){
-		    var o = { number: i + 1, markerColor: 'darkred' };
-		    if (e.has_description == 1) { o.markerColor = 'blue' };
-		    o = L.OxianaMarkers.icon(o);
-		    var m = L.OxianaMarkers.marker([e.lat, e.lon], { id: 'p' + e.id, icon: o })
-		    // console.log(m.toGeoJSON())
-		    m.addTo(map).bindPopup("<b>" + (i+1) +
-					   "</b> | <a href=\"/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/"
-					   + [ e.id, e.name ].join('/') + "\">" + e.name + "</a>");
-		    
-		    marker_group.push(m);
-		    var v = m.toGeoJSON();
-		    v.properties = { name: e.name, id: e.id };
-		    poi_list.push(v)
-		    e.marker = m;
-		    e.idx = i;
-		    var i = $(m._icon);
-		});
-		marker_group = new L.featureGroup(marker_group);
-		map.fitBounds(marker_group.getBounds());
-		var template = Handlebars.compile($("#poi_list_tpl").html());
-		$('#poi_list').html(template({ places: poi }));
-		$('li.poi').hover(
-		    function(e) {
-			var m = poi[this.id.replace(/m/, "")].marker.icon();
-			m.data('oldclass', m.attr('class'))
-			if (m.hasClass('awesome-marker-icon-darkred')) m.toggleClass('awesome-marker-icon-darkred')
-			if (m.hasClass('awesome-marker-icon-blue'))    m.toggleClass('awesome-marker-icon-blue')
-			m.toggleClass('awesome-marker-icon-orange').css('z-index', 1000);
-			
-		    },
-		    function(e) {
-			var m = poi[this.id.replace(/m/, "")].marker.icon();
-			m.attr('class', m.data('oldclass')).css('z-index', 900);
-		    }
-		);
-	    });
-    })
-</script>
-
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -83,18 +9,23 @@
       <div id="map"></div>
     </div>
     <div class="col-md-12">
-      <div class="multicol">
-	<script id="poi_list_tpl" type="text/x-handlebars-template">
-	  {{#each places}}
-	  <li id="m{{this.idx}}" class="poi">
-	    <a href="/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/{{this.id}}/{{this.name}}"
-	       >{{this.name}}</a>{{#if this.poi_type}} <i class="fa fa-{{this.poi_type}}"></i>{{/if}}
-	  </li>
-	  {{/each}}
-	</script>
-	<ol id="poi_list">
-	</ol>
-      </div>
+      Listing of stuff
+      <table>
+	<tr>
+	  <td>name</td>
+	  <td>description</td>
+	  <td>address</td>
+	  <td>hours</td>
+	</tr>
+	[% FOR p = c.stash.map.search_related_rs('pois').all %]
+	<tr>
+	  <td><a href="/maps/[% c.stash.map.id %]/[% c.stash.map.name %]/[% p.id %]/[% p.name | uri %]/edit">[% p.name %]</a></td>
+	  <td>[% p.description.length > 1 %]</td>
+	  <td>[% p.extended_data.address.length > 1 %]</td>
+	  <td>[% p.extended_data.hours.length > 1 %]</td>
+	</tr>
+	[% END %]
+      </table>
     </div>
   </div>
 </div>

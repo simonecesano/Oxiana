@@ -1,0 +1,3 @@
+[% IF i.content %]
+<img style="width:30%;height:auto;" src="data:image/png;base64,[% i.content %]">
+[% END %]
